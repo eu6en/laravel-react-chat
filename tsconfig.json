@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "jsx": "react-jsx", // Enable JSX support
+        "target": "es5",
+        "module": "es6",
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": false,
+        "allowJs": true, // Allow JavaScript for easier migration
+        "outDir": "./public/js",
+        "baseUrl": "./resources",
+        "paths": {
+        "@/*": ["./*"]
+        }
+    },
+    "exclude": ["node_modules"]
+}
