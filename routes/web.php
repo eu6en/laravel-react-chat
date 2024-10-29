@@ -24,4 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/test-react-page', function () {
+    return Inertia::render('TestReactPage');
+});
+
+Route::get('/test-laravel-page', function () {
+    return view('test-laravel-page');
+});
+
 require __DIR__.'/auth.php';
