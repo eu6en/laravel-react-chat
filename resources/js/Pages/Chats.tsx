@@ -1,5 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 type Chat = {
     id: number;
@@ -10,35 +12,23 @@ type Chat = {
     profileImage: string;
 };
 
-const chats: Chat[] = [
-    {
-        id: 1,
-        name: "Alice Johnson",
-        slug: "alice",
-        message: "Hey! Are you coming to the meeting?",
-        timestamp: "10:30 AM",
-        profileImage: "https://via.placeholder.com/40x40",
-    },
-    {
-        id: 2,
-        name: "Bob Smith",
-        slug: "bob",
-        message: "See you at the event tonight!",
-        timestamp: "9:15 AM",
-        profileImage: "https://via.placeholder.com/40x40",
-    },
-    {
-        id: 3,
-        name: "Charlie Evans",
-        slug: "charlie",
-        message: "Thanks for the document!",
-        timestamp: "Yesterday",
-        profileImage: "https://via.placeholder.com/40x40",
-    },
-    // Add more chat data here as needed
-];
-
 export default function Chats() {
+
+    const [chats, setChats] = useState([]);
+
+    useEffect(() => {
+        // Get CSRF cookie
+        axios.get('/sanctum/csrf-cookie').then((tmp) => {
+            console.log('response:', tmp)
+            // Now make authenticated request
+            axios.get('/api/chats').then(response => {
+                console.log(response.data);
+                setChats(response.data);
+            });
+        });
+
+    }, []);
+
     return (
         <AuthenticatedLayout>
             <Head title="Chats" />
