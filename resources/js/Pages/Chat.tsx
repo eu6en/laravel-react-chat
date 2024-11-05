@@ -4,6 +4,8 @@ import { usePage } from "@inertiajs/react";
 import { Head } from '@inertiajs/react';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PageProps } from "../../../vendor/laravel/breeze/stubs/inertia-react-ts/resources/js/types";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 type ChatProps = PageProps & {
   userSlug: string;
@@ -25,7 +27,22 @@ const messages: Message[] = [
 
 const Chat: React.FC = () => {
   const { props } = usePage<ChatProps>();
-  const { userSlug } = props;
+const { slug: pageSlug } = props;
+
+  const [messages, setMessages] = useState<any[]>([]);
+
+    useEffect(() => {
+
+        try {
+            axios.get(`/api/messages?slug=${pageSlug}`).then(response => {
+                console.log(response.data);
+                setMessages(response.data);
+            });
+        } catch (error) {
+            console.error(error);
+        };
+
+    }, []);
 
   return (
     <AuthenticatedLayout>

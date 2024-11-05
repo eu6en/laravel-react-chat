@@ -1,6 +1,7 @@
 export interface Chat {
     id: number;
-    name: string;
+    name: string | null;
+    slug: string | null;
     is_group: boolean;
     created_at: string;
     updated_at: string;

@@ -13,33 +13,27 @@ class ChatController extends Controller
         $user = $request->user();
 
         // Get all chats where the user is a participant alongside the last message and its timestamp
-        $chats = Chat::whereHas('participants', function ($query) use ($user) {
+        $userChats = Chat::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
         ->with(['participants', 'messages' => function ($query) {
-            $query->latest()->first();
+            $query->latest()->limit(1);
         }])
         ->get()
         ->map(function ($chat) use ($user) {
             $lastMessage = $chat->messages->first();
+            $chatName = $chat->is_group ? $chat->name : $chat->participants->where('user_id', '!=', $user->id)->first()->user->name;
+            $chatSlug = $chat->is_group ? $chat->slug : $chat->participants->where('user_id', '!=', $user->id)->first()->user->slug;
             return [
                 'id' => $chat->id,
-                'name' => $chat->name,
+                'name' => $chatName,
                 'is_group' => $chat->is_group,
                 'last_message' => $lastMessage ? ($lastMessage->sender->id == $user->id ? 'You: ' : '') . $lastMessage->content : null,
                 'last_message_timestamp' => $lastMessage ? $lastMessage->created_at->format('m/d/Y') : $chat->created_at->format('m/d/Y'),
-                'link' => $chat->is_group ? ($chat->name ? Str::slug($chat->name) : $chat->id) : $chat->participants->where('id', '!=', $user->id)->first()->user->slug,
+                'link' => $chatSlug,
             ];
         });
 
-
-        // $chats = Chat::whereHas('participants', function ($query) use ($user) {
-        //     $query->where('user_id', $user->id);
-        // })->get();
-
-        return response()->json($chats);
+        return response()->json($userChats);
     }
 }
-
-
-// Function to calculate 2+2

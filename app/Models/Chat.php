@@ -15,11 +15,11 @@ class Chat extends Model
     // Define relationships, e.g., a chat has many messages
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(Message::class, 'chat_id');
     }
 
     public function participants()
     {
-        return $this->hasMany(ChatParticipant::class);
+        return $this->hasMany(ChatParticipant::class, 'chat_id');
     }
 }

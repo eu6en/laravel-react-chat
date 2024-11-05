@@ -18,7 +18,7 @@ class Message extends Model
     // Define relationships
     public function chat()
     {
-        return $this->belongsTo(Chat::class);
+        return $this->belongsTo(Chat::class, 'chat_id');
     }
 
     public function sender()

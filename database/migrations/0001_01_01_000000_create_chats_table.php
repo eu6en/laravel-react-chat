@@ -14,7 +14,8 @@ return new class extends Migration
         // Create chats table
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable(); // For group chats
+            $table->string('name')->nullable();
+            $table->string('slug')->unique()->nullable();
             $table->boolean('is_group')->default(false);
             $table->timestamps();
         });
