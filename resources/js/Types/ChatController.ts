@@ -4,4 +4,5 @@ export interface GetUserChatsResponse {
     last_message: string;
     last_message_timestamp: string;
     name: string;
+    link: string;
 }

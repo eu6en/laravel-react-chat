@@ -33,7 +33,7 @@ export default function Chats() {
 
                 <div className="flex-1 overflow-y-auto">
                     {chats.map((chatInfo) => (
-                        <ChatCard chatInfo={chatInfo}/>
+                        <ChatCard chatInfo={chatInfo} key={chatInfo.id}/>
                     ))}
                 </div>
             </div>

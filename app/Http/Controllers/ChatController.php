@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Chat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ChatController extends Controller
 {
@@ -26,7 +27,8 @@ class ChatController extends Controller
                 'name' => $chat->name,
                 'is_group' => $chat->is_group,
                 'last_message' => $lastMessage ? ($lastMessage->sender->id == $user->id ? 'You: ' : '') . $lastMessage->content : null,
-                'last_message_timestamp' => $lastMessage ? $lastMessage->created_at->format('m/d/Y') : null,
+                'last_message_timestamp' => $lastMessage ? $lastMessage->created_at->format('m/d/Y') : $chat->created_at->format('m/d/Y'),
+                'link' => $chat->is_group ? ($chat->name ? Str::slug($chat->name) : $chat->id) : $chat->participants->where('id', '!=', $user->id)->first()->user->slug,
             ];
         });
 
