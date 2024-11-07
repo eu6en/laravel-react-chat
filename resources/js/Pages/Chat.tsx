@@ -11,7 +11,7 @@ import { Message } from "@/Types/DBInterfaces";
 import { fetchChat } from "@/apis/chat";
 
 type ChatPageProps = PageProps & {
-    chatId: Pick<Message, 'chat_id'>['chat_id'];
+    chatId: Message['chat_id'];
 };
 
 const Chat = () => {

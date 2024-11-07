@@ -12,7 +12,7 @@ type fetchChatResult =
     | fetchChatAxiosError
     | UnknownError;
 
-export async function fetchChat(chatId: Pick<Message, 'chat_id'>['chat_id']): Promise<fetchChatResult> {
+export async function fetchChat(chatId: Message['chat_id']): Promise<fetchChatResult> {
     if (!chatId || isNaN(Number(chatId))) return { _t: 'invalid-chat-id-error', error: new Error('Invalid chat ID: Chat ID must be a number') };
     try {
         const response = await axios.get(`/api/chats/${chatId}`);

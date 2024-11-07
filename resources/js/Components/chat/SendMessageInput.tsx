@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { FormEvent, useState } from "react";
 
 interface SendMessageInputProps {
-    chatId: Pick<Message, 'chat_id'>['chat_id'];
+    chatId: Message['chat_id'];
     setChatInfo: React.Dispatch<React.SetStateAction<GetSingleChatResource | null>>;
 }
 
