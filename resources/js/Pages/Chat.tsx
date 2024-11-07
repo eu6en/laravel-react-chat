@@ -2,13 +2,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePage } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { PageProps } from "../../../vendor/laravel/breeze/stubs/inertia-react-ts/resources/js/types";
-import axios from "axios";
 import { GetSingleChatResource } from "@/Types/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
+import { fetchChat } from "@/apis/chat";
 
 type ChatPageProps = PageProps & {
     chatId: Pick<Message, 'chat_id'>['chat_id'];
@@ -17,20 +17,30 @@ type ChatPageProps = PageProps & {
 const Chat = () => {
 
     const { props } = usePage<ChatPageProps>();
+    const chatId = props.chatId;
     const [chatInfo, setChatInfo] = useState<GetSingleChatResource | null>(null);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesListRef = useRef<HTMLDivElement | null>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        try {
-            // Fetch chat info
-            axios.get(`/api/chats/${props.chatId}`).then(response => {
-                setChatInfo(response.data);
-            });
-        } catch (error) {
-            console.error(error);
-        };
+        (async () => {
+            const result = await fetchChat(chatId);
+            switch (result._t) {
+                case 'success':
+                    setChatInfo(result.result);
+                    break;
+                default:
+                    setError(result.error);
+                    break;
+            }
+        })();
     }, []);
+
+    if (error) {
+        // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
+        throw error;
+    }
 
     // // useLayoutEffect ensures that getBoundingClientRect returns the correct value
     useLayoutEffect(() => {
@@ -55,7 +65,7 @@ const Chat = () => {
                         <ChatHeader chatName={chatInfo.chat_name} />
                         <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
                         <footer className="p-4 border-t">
-                            <SendMessageInput chatId={props.chatId} setChatInfo={setChatInfo} />
+                            <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
                         </footer>
                     </>
                 )}

@@ -2,7 +2,7 @@
     "compilerOptions": {
         "jsx": "react-jsx", // Enable JSX support
         "target": "es5",
-        "module": "es6",
+        "module": "es2022",
         "moduleResolution": "node",
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -15,7 +15,7 @@
         "paths": {
             "@/*": ["js/*"]
         },
-        "lib": ["dom", "es2015"],
+        "lib": ["dom", "ES2022"],
     },
     "exclude": ["node_modules"]
 }

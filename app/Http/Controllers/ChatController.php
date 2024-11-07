@@ -30,6 +30,12 @@ class ChatController extends Controller
     {
         $chat = Chat::where('id', $chatId)->first();
 
+        if (!$chat) {
+            return response()->json([
+                'message' => 'The requested chat could not be found. Please check the chat ID and try again.',
+            ], 404);
+        }
+
         return new ChatResource($chat);
     }
 
@@ -37,6 +43,12 @@ class ChatController extends Controller
     {
         $user = $request->user();
         $chat = Chat::where('id', $chatId)->first();
+
+        if (!$chat) {
+            return response()->json([
+                'message' => 'Chat not found',
+            ], 404);
+        }
 
         $message = $chat->messages()->create([
             'chat_id' => $chatId,
