@@ -1,13 +1,13 @@
 import ChatCard from "@/Components/ChatCard";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { GetUserChatsResponse } from "@/Types/ChatController";
+import { GetUserChatsResource } from "@/Types/ChatController";
 import { Head } from '@inertiajs/react';
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Chats() {
 
-    const [chats, setChats] = useState<GetUserChatsResponse[]>([]);
+    const [chats, setChats] = useState<GetUserChatsResource[]>([]);
 
     useEffect(() => {
 

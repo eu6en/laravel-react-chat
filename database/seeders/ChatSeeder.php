@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ChatSeeder extends Seeder
 {
@@ -28,7 +29,6 @@ class ChatSeeder extends Seeder
 
         // Create a direct chat between User 1 and User 2
         $chat1 = Chat::create([
-            'name' => 'Direct Chat',
             'is_group' => false,
         ]);
 
@@ -59,6 +59,7 @@ class ChatSeeder extends Seeder
         $chat2 = Chat::create([
             'is_group' => true,
             'name' => 'Group Chat',
+            'slug' => Str::slug('Group Chat'),
         ]);
 
         ChatParticipant::create([

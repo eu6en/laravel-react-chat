@@ -25,4 +25,8 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
+
+    protected $casts = [
+        'is_you' => 'boolean',
+    ];
 }

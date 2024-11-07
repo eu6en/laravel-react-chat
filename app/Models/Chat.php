@@ -22,4 +22,8 @@ class Chat extends Model
     {
         return $this->hasMany(ChatParticipant::class, 'chat_id');
     }
+
+    protected $casts = [
+        'is_group' => 'boolean',
+    ];
 }
