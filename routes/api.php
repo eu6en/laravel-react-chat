@@ -4,3 +4,4 @@ use App\Http\Controllers\ChatController;
 
 Route::middleware(['web', 'auth:sanctum'])->get('/chats', [ChatController::class, 'getUserChats']);
 Route::middleware(['web', 'auth:sanctum'])->get('/chats/{chatId}', [ChatController::class, 'getSingleChat']);
+Route::middleware(['web', 'auth:sanctum'])->post('/chats/{chatId}/send-message', [ChatController::class, 'sendMessage']);

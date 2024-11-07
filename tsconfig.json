@@ -14,7 +14,8 @@
         "baseUrl": "./resources",
         "paths": {
             "@/*": ["js/*"]
-        }
+        },
+        "lib": ["dom", "es2015"],
     },
     "exclude": ["node_modules"]
 }

@@ -1,4 +1,4 @@
-import ChatCard from "@/Components/ChatCard";
+import ChatCard from "@/Components/chat/ChatCard";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { GetUserChatsResource } from "@/Types/ChatController";
 import { Head } from '@inertiajs/react';

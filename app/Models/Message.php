@@ -15,6 +15,10 @@ class Message extends Model
     // Define the attributes that are mass assignable
     protected $fillable = ['chat_id', 'sender_id', 'content', 'read_at'];
 
+    protected $casts = [
+        'is_you' => 'boolean',
+    ];
+
     // Define relationships
     public function chat()
     {
@@ -25,8 +29,4 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sender_id');
     }
-
-    protected $casts = [
-        'is_you' => 'boolean',
-    ];
 }
