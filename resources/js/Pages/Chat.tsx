@@ -9,6 +9,7 @@ import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
 import { fetchChat } from "@/apis/chat";
+import { useParams } from "react-router-dom";
 
 type ChatPageProps = PageProps & {
     chatId: Message['chat_id'];
@@ -16,8 +17,9 @@ type ChatPageProps = PageProps & {
 
 const Chat = () => {
 
-    const { props } = usePage<ChatPageProps>();
-    const chatId = props.chatId;
+    const { chatId } = useParams<{ chatId: string }>();
+    if (chatId === undefined) throw new Error("Chat ID is undefined");
+
     const [chatInfo, setChatInfo] = useState<GetSingleChatResource | null>(null);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesListRef = useRef<HTMLDivElement | null>(null);
