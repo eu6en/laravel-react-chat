@@ -3,7 +3,8 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
+import { Helmet } from "react-helmet";
 
 export default function Register() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -23,7 +24,9 @@ export default function Register() {
 
     return (
         <GuestLayout>
-            <Head title="Register" />
+            <Helmet>
+                <title>Register</title>
+            </Helmet>
 
             <form onSubmit={submit}>
                 <div>

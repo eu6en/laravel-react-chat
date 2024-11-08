@@ -1,8 +1,10 @@
-import { Head } from "@inertiajs/react";
+import { Helmet } from "react-helmet";
 
 const ChatLoading = () => (
     <>
-        <Head title="Loading chat..." />
+        <Helmet>
+            <title>Loading chat...</title>
+        </Helmet>
         <div>Loading chat...</div>
     </>
 );

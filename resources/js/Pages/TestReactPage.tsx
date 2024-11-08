@@ -1,9 +1,11 @@
-import { Head } from '@inertiajs/react';
+import { Helmet } from "react-helmet";
 
 export default function TestReactPage() {
     return (
         <section>
-            <Head title="TestReactPage" />
+            <Helmet>
+                <title>TestReactPage</title>
+            </Helmet>
             <h2 className="test-class">Hello World from React</h2>
         </section>
     );

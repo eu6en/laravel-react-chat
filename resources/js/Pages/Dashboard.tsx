@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Helmet } from "react-helmet";
 
 export default function Dashboard() {
     return (
@@ -10,7 +10,9 @@ export default function Dashboard() {
                 </h2>
             }
         >
-            <Head title="Dashboard" />
+            <Helmet>
+                <title>Dashboard</title>
+            </Helmet>
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
