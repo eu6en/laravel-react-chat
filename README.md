@@ -1,66 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel React Chat Application
+This is a chat application built using Laravel for the backend and React with Inertia.js for the frontend. The application provides real-time chat functionality, user authentication, and profile management. 
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+It utilizes Tailwind CSS for styling, TypeScript for type safety, React Router for client-side routing, and Vite for fast builds and hot module replacement.
 
-## About Laravel
+## Tech Stack
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Laravel**: A PHP framework for building robust and scalable web applications.
+- **React**: A JavaScript library for building user interfaces.
+- **Inertia.js**: A framework that allows you to build single-page apps using classic server-side routing and controllers.
+- **Tailwind CSS**: A utility-first CSS framework for styling the application.
+- **Docker**: Containerization platform for running the application database.
+- **Vite**: A build tool that provides a faster and leaner development experience for modern web projects.
+- **Sanctum**: Laravel's lightweight authentication system for SPAs and simple APIs.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone the repository**:
+    ```sh
+    git clone https://github.com/fanboxio/laravel-react-chat-eugene
+    cd laravel-react-chat
+    ```
 
-## Learning Laravel
+2. **Install dependencies**:
+    ```sh
+    composer install
+    npm install
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Copy the `.env.example` file to `.env`**:
+    ```sh
+    cp .env.example .env
+    ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. **Generate an application key**:
+    ```sh
+    php artisan key:generate
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+8. **Run database in Docker**:
+    
 
-## Laravel Sponsors
+5. **Set up the database**:
+    - Update the `.env` file with your database credentials.
+    - Run database in Docker
+        ```sh
+        docker-compose up -d
+        ```
+    - Run the migrations:
+        ```sh
+        php artisan migrate
+        ```
+    - Seed the database:
+        ```sh
+        php artisan db:seed
+        ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. **Build the frontend assets**:
+    ```sh
+    npm run dev
+    ```
 
-### Premium Partners
+7. **Start the development server**:
+    ```sh
+    php artisan serve
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Launching the App After Initial Setup
 
-## Contributing
+After initially completing the installation steps, you can launch the application with the following commands:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. **Start the database Docker container**:
+    ```sh
+    docker-compose up -d
+    ```
 
-## Code of Conduct
+2. **Start the backend server**:
+    ```sh
+    php artisan serve
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. **Start the frontend development server**:
+    ```sh
+    npm run dev
+    ```
 
-## Security Vulnerabilities
+## Usage
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- **Authentication**: The application uses Laravel Breeze for authentication. You can register, log in, and manage your profile.
+- **Chat**: Users can send and receive messages in real-time.
+- **Profile Management**: Users can update their profile information and change their password.
