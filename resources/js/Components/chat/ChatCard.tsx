@@ -1,5 +1,4 @@
 import { GetUserChatsResource } from "@/Types/ChatController";
-import { Link } from "@inertiajs/react";
 
 interface ChatCardProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     chatInfo: GetUserChatsResource;
@@ -10,10 +9,9 @@ export default function ChatCard({
     ...props
 }: ChatCardProps) {
     return (
-        <Link
+        <div
             {...(props as any)}
             className="flex px-6 py-4 hover:bg-gray-200 cursor-pointer border-b items-start"
-            href={chatInfo.link}
         >
             <img
                 src='/images/chat-bubble-oval-left.svg'
@@ -27,6 +25,6 @@ export default function ChatCard({
                 </div>
                 <p className="text-sm text-gray-600 truncate">{chatInfo.last_message}</p>
             </div>
-        </Link>
+        </div>
     );
 }

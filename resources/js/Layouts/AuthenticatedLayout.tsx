@@ -17,7 +17,8 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100 h-screen flex flex-col justify-stretch">
+
             <nav className="border-b border-gray-100 bg-white">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
@@ -87,7 +88,7 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                             <button
                                 onClick={() =>
                                     setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
+                                        (previousState) => false,
                                     )
                                 }
                                 className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
@@ -175,7 +176,7 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                 </header>
             )}
 
-            <main>{children}</main>
+            <main className="h-full flex flex-col">{children}</main>
         </div>
     );
 }

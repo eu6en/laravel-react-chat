@@ -1,7 +1,4 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { usePage } from "@inertiajs/react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { PageProps } from "../../../vendor/laravel/breeze/stubs/inertia-react-ts/resources/js/types";
 import { GetSingleChatResource } from "@/Types/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
@@ -9,15 +6,14 @@ import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
 import { fetchChat } from "@/apis/chat";
-import { useParams } from "react-router-dom";
 
-type ChatPageProps = PageProps & {
+type ChatProps = {
     chatId: Message['chat_id'];
 };
 
-const Chat = () => {
+const Chat = ({ chatId }: ChatProps) => {
 
-    const { chatId } = useParams<{ chatId: string }>();
+    // const { chatId } = useParams<{ chatId: string }>();
     if (chatId === undefined) throw new Error("Chat ID is undefined");
 
     const [chatInfo, setChatInfo] = useState<GetSingleChatResource | null>(null);
@@ -37,7 +33,7 @@ const Chat = () => {
                     break;
             }
         })();
-    }, []);
+    }, [chatId]);
 
     if (error) {
         // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
@@ -58,21 +54,19 @@ const Chat = () => {
     }, [chatInfo]);
 
     return (
-        <AuthenticatedLayout>
-            <div className="flex flex-col bg-gray-100" ref={chatContainerRef}>
-                {!chatInfo ? (
-                    <ChatLoading />
-                ) : (
-                    <>
-                        <ChatHeader chatName={chatInfo.chat_name} />
-                        <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
-                        <footer className="p-4 border-t">
-                            <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
-                        </footer>
-                    </>
-                )}
-            </div>
-        </AuthenticatedLayout>
+        <div className="flex flex-col bg-gray-100" ref={chatContainerRef}>
+            {!chatInfo ? (
+                <ChatLoading />
+            ) : (
+                <>
+                    <ChatHeader chatName={chatInfo.chat_name} />
+                    <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
+                    <footer className="p-4 border-t">
+                        <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
+                    </footer>
+                </>
+            )}
+        </div>
     );
 };
 
