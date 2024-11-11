@@ -55,15 +55,6 @@ It utilizes Tailwind CSS for styling, TypeScript for type safety, React Router f
         php artisan db:seed
         ```
 
-6. **Build the frontend assets**:
-    ```sh
-    npm run dev
-    ```
-
-7. **Start the development server**:
-    ```sh
-    php artisan serve
-    ```
 
 ## Launching the App After Initial Setup
 
@@ -79,9 +70,19 @@ After initially completing the installation steps, you can launch the applicatio
     php artisan serve
     ```
 
-3. **Start the frontend development server**:
+3. **Start the frontend development Vite server**:
     ```sh
     npm run dev
+    ```
+
+4. **Start the Reverb WebSockets server**:
+    ```sh
+    php artisan reverb:start
+    ```
+
+5. (optional) **Restart the Reverb WebSockets server after making changes to your code**:
+    ```sh
+    php artisan reverb:start
     ```
 
 ## Usage
