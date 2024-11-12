@@ -19,7 +19,7 @@ export interface ChatParticipantResource {
 // File: app/Http/resources/MessagesResource.php
 export interface MessagesResource {
     sender_name: string;
-    is_you: boolean;
+    sender_id: number;
     content: string;
     read_at: string | null;
     created_at: string;

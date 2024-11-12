@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { GetSingleChatResource, MessagesResource } from "@/Types/ChatController";
+import { GetSingleChatResource, MessagesResource } from "@/Types/Controllers/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
@@ -13,7 +13,6 @@ type ChatProps = {
 
 const Chat = ({ chatId }: ChatProps) => {
 
-    // const { chatId } = useParams<{ chatId: string }>();
     if (chatId === undefined) throw new Error("Chat ID is undefined");
 
     const [chatInfo, setChatInfo] = useState<GetSingleChatResource | null>(null);
@@ -48,7 +47,6 @@ const Chat = ({ chatId }: ChatProps) => {
                         messages: [...prevChatInfo.messages, messageObject]
                     };
                 });
-                // chatInfo?.messages.push(messageObject);
             });
 
     }, [chatId]);

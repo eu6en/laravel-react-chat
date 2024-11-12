@@ -1,4 +1,4 @@
-import { GetSingleChatResource } from "@/Types/ChatController";
+import { GetSingleChatResource } from "@/Types/Controllers/ChatController";
 import { Helmet } from "react-helmet";
 
 const ChatHeader = ({ chatName }: { chatName: GetSingleChatResource['chat_name'] }) => {

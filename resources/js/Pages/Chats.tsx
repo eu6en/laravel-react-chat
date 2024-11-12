@@ -1,7 +1,7 @@
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { GetUserChatsResource } from "@/Types/ChatController";
+import { GetUserChatsResource } from "@/Types/Controllers/ChatController";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";

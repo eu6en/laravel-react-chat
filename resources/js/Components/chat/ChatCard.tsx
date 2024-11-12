@@ -1,4 +1,4 @@
-import { GetUserChatsResource } from "@/Types/ChatController";
+import { GetUserChatsResource } from "@/Types/Controllers/ChatController";
 
 interface ChatCardProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
     chatInfo: GetUserChatsResource;

@@ -1,4 +1,4 @@
-import { GetSingleChatResource } from "@/Types/ChatController";
+import { GetSingleChatResource } from "@/Types/Controllers/ChatController";
 import { Message } from "@/Types/DBInterfaces";
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
