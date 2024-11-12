@@ -83,7 +83,7 @@ After initially completing the installation steps, you can launch the applicatio
     ```
     (optional) **Restart the Reverb WebSockets server after making changes to your code**:
     ```sh
-    php artisan reverb:start
+    php artisan reverb:restart
     ```
 
 5. **Run the Jobs Queue Worker for WebSockets broadcasting to work**
