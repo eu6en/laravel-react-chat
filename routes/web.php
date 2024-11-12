@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -21,11 +22,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect('/');
     })->name('dashboard');
 
-    // Auth protect all routes except login
-    Route::get('/{any}', function () {
-        return Inertia::render('App'); // Render main React entry component
-    })->where('any', '^(?!login).*$'); // Exclude login
+});
 
+Route::get('/', function () {
+    if (!Auth::check()) {
+        return redirect('/login');
+    } else {
+        return Inertia::render('App');
+    }
 });
 
 require __DIR__.'/auth.php';
