@@ -12,6 +12,8 @@ It utilizes Tailwind CSS for styling, TypeScript for type safety, React Router f
 - **Docker**: Containerization platform for running the application database.
 - **Vite**: A build tool that provides a faster and leaner development experience for modern web projects.
 - **Sanctum**: Laravel's lightweight authentication system for SPAs and simple APIs.
+- **Reverb**: Laravel WebSocket server to handle real-time events
+- **Laravel Echo**: Frontend JavaScript library used to subscribe to channels and listen for events broadcast by Laravel backend, enabling real-time web communication
 
 ## Installation
 
@@ -79,10 +81,14 @@ After initially completing the installation steps, you can launch the applicatio
     ```sh
     php artisan reverb:start
     ```
-
-5. (optional) **Restart the Reverb WebSockets server after making changes to your code**:
+    (optional) **Restart the Reverb WebSockets server after making changes to your code**:
     ```sh
     php artisan reverb:start
+    ```
+
+5. **Run the Jobs Queue Worker for WebSockets broadcasting to work**
+    ```sh
+    php artisan queue:listen
     ```
 
 ## Usage
