@@ -16,7 +16,7 @@ class MessagesResource extends JsonResource
     {
         return [
             'sender_name' => $this->sender->name,
-            'is_you' => $this->sender_id === $request->user()->id,
+            // 'is_you' => $this->sender_id === $request->user()->id,
             'content' => $this->content,
             'read_at' => $this->read_at,
             'created_at' => $this->created_at,

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { GetSingleChatResource } from "@/Types/ChatController";
+import { GetSingleChatResource, MessagesResource } from "@/Types/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
@@ -33,6 +33,24 @@ const Chat = ({ chatId }: ChatProps) => {
                     break;
             }
         })();
+
+        window.Echo.channel(`chat.${chatId}`)
+            .listen('MessageSent', (event) => {
+                console.log("HELLO WORLD MOTHERFUCKER", event);
+                if (!event.message) {
+                    console.error('NO MESSAGE');
+                };
+                const messageObject: MessagesResource = event.message;
+                setChatInfo((prevChatInfo) => {
+                    if (!prevChatInfo) return null;
+                    return {
+                        ...prevChatInfo,
+                        messages: [...prevChatInfo.messages, messageObject]
+                    };
+                });
+                // chatInfo?.messages.push(messageObject);
+            });
+
     }, [chatId]);
 
     if (error) {

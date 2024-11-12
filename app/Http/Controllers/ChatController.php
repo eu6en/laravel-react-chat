@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\UserChatsResource;
 use App\Http\Resources\MessagesResource;
+use App\Events\MessageSent;
 
 class ChatController extends Controller
 {
@@ -50,16 +51,20 @@ class ChatController extends Controller
             ], 404);
         }
 
-        $message = $chat->messages()->create([
+        $messageArr = $chat->messages()->create([
             'chat_id' => $chatId,
             'sender_id' => $user->id,
             'content' => $request->content,
             'read_at' => null,
         ]);
 
+        $messageResource = new MessagesResource($messageArr);
+
+        broadcast(new MessageSent($messageResource))->toOthers();
+
         return response()->json([
             'message' => 'Message sent successfully',
-            'data' => new MessagesResource($message),
+            'data' => $messageResource,
         ]);
     }
 }
