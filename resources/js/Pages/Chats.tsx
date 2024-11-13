@@ -1,5 +1,6 @@
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
+import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { GetUserChatsResource } from "@/Types/Controllers/ChatController";
 import axios from "axios";
@@ -10,6 +11,8 @@ export default function Chats() {
     const [chats, setChats] = useState<GetUserChatsResource[]>([]);
     const [selectedChat, setSelectedChat] = useState<GetUserChatsResource | null>(null);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     useEffect(() => {
         axios.get('/api/chats')
             .then(response => {
@@ -19,8 +22,16 @@ export default function Chats() {
     }, []);
 
     const handleNewChatClick = () => {
-        console.log('New chat clicked');
+        setIsModalOpen(true);
     }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleFormSubmit = (chatName: string, chatUserName: string) => {
+        console.log('handleFormSubmit function is not implemented yet');
+    };
 
     return (
         <>
@@ -62,6 +73,7 @@ export default function Chats() {
                         )}
                     </div>
                 </div>
+                <CreateNewChatModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
             </AuthenticatedLayout>
         </>
     );
