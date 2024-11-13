@@ -1,3 +1,4 @@
+import { store } from "@/apis/chat";
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
@@ -29,8 +30,18 @@ export default function Chats() {
         setIsModalOpen(false);
     };
 
-    const handleFormSubmit = (chatName: string, chatUserName: string) => {
-        console.log('handleFormSubmit function is not implemented yet');
+    const handleFormSubmit = (chatName: string, chatUserName: string, isGroup: boolean) => {
+        store(chatName, chatUserName, isGroup)
+            .then(response => {
+                switch (response._t) {
+                    case 'success':
+                        setChats([...chats, response.result]);
+                        break;
+                    default:
+                        throw new Error(response.error.message);
+                }
+            })
+            .catch(error => console.error(error));
     };
 
     return (

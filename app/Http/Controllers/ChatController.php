@@ -8,6 +8,7 @@ use App\Http\Resources\ChatResource;
 use App\Http\Resources\UserChatsResource;
 use App\Http\Resources\MessagesResource;
 use App\Events\MessageSent;
+use App\Models\User;
 
 class ChatController extends Controller
 {
@@ -65,6 +66,65 @@ class ChatController extends Controller
         return response()->json([
             'message' => 'Message sent successfully',
             'data' => $messageResource,
+        ]);
+    }
+
+    public function store (Request $request)
+    {
+        $chatParticipantName = $request->input('chatParticipantName');
+        $chatName = $request->input('chatName');
+        $isGroup = $request->input('isGroup');
+
+        $chatParticipantUser = User::where('name', $chatParticipantName)->first();
+
+        // Check if the user exists
+        if (! $chatParticipantUser) {
+            return response()->json([
+                'message' => 'User not found',
+            ], 404);
+        }
+
+        $chatParams = [];
+
+        // If it's a group chat, ensure a name is provided
+        if ($isGroup) {
+            if (!$chatName) {
+                return response()->json([
+                    'message' => 'Please provide a name for the group chat',
+                ], 400);
+            };
+            $chatParams = [
+                'name' => $chatName,
+                'user_id' =>  $chatParticipantUser->id,
+            ];
+        } else {
+            $chatParams = [
+                'name' => null,
+                'user_id' =>  $chatParticipantUser->id,
+            ];
+        }
+
+        $chat = Chat::create($chatParams);
+
+        // Create a chat participant entry for the user who joined the chat
+        $chat->participants()->create([
+            'chat_id' => $chat->id,
+            'user_id' =>  $chatParticipantUser->id,
+            'joined_at' => now(),
+        ]);
+
+        // Create a chat participant entry for the authenticated user
+        $chat->participants()->create([
+            'chat_id' => $chat->id,
+            'user_id' => $request->user()->id, // Get the authenticated user id
+            'joined_at' => now(),
+            'is_admin' => $isGroup ?? false, // Assign admin status if it's a group chat
+        ]);
+
+        // Return the chat resource
+        return response()->json([
+            'message' => 'Chat created successfully',
+            'data' => new ChatResource($chat),
         ]);
     }
 }

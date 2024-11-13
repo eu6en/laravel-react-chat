@@ -7,7 +7,7 @@ import { fetchUsersByName } from "@/apis/user";
 interface CreateNewChatModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (chatName: string, chatUser: string) => void;
+    onSubmit: (chatName: string, chatUser: string, isGroup: boolean) => void;
 }
 
 const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose, onSubmit }) => {
@@ -44,7 +44,7 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
         setChatUserName('');
         setSuggestions([]);
         setShowSuggestions(false);
-        onSubmit(groupChatName, chatUserName);
+        onSubmit(groupChatName, chatUserName, isGroupChat);
         onClose();
     };
 
