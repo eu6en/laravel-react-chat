@@ -3,14 +3,14 @@ import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { GetUserChatsResource } from "@/Types/Controllers/ChatController";
+import { ChatResource } from "@/Types/Controllers/ChatController";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
 export default function Chats() {
-    const [chats, setChats] = useState<GetUserChatsResource[]>([]);
-    const [selectedChat, setSelectedChat] = useState<GetUserChatsResource | null>(null);
+    const [chats, setChats] = useState<ChatResource[]>([]);
+    const [selectedChat, setSelectedChat] = useState<ChatResource | null>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 

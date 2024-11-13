@@ -1,9 +1,9 @@
-import { GetSingleChatResource } from "@/Types/Controllers/ChatController";
+import { ChatResource } from "@/Types/Controllers/ChatController";
 import { Helmet } from "react-helmet";
 
-const ChatHeader = ({ chatName }: { chatName: GetSingleChatResource['chat_name'] }) => {
+const ChatHeader = ({ chatInfo }: { chatInfo: ChatResource }) => {
 
-    const chatHeadline = "Chat" + (chatName ? ` with ${chatName}` : '');
+    const chatHeadline = chatInfo.is_group ? chatInfo.name || 'Group Chat' : `Chat with ${chatInfo.participants[1].user_name}`;
 
     return (
         <>

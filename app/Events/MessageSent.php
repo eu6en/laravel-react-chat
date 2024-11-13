@@ -7,7 +7,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use App\Http\Resources\MessagesResource;
+use App\Http\Resources\MessageResource;
 
 class MessageSent implements ShouldBroadcast
 {
@@ -15,7 +15,7 @@ class MessageSent implements ShouldBroadcast
 
     public $messageResource;
 
-    public function __construct(MessagesResource $messageResource)
+    public function __construct(MessageResource $messageResource)
     {
         $this->messageResource = $messageResource;
     }

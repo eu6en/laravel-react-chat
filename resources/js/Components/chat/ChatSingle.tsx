@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { GetSingleChatResource, MessagesResource } from "@/Types/Controllers/ChatController";
+import { ChatResource, MessageResource } from "@/Types/Controllers/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
-import { fetchChat } from "@/apis/chat";
+import { show } from "@/apis/chat";
 
 type ChatProps = {
     chatId: Message['chat_id'];
@@ -15,31 +15,31 @@ const Chat = ({ chatId }: ChatProps) => {
 
     if (chatId === undefined) throw new Error("Chat ID is undefined");
 
-    const [chatInfo, setChatInfo] = useState<GetSingleChatResource | null>(null);
+    const [chatInfo, setChatInfo] = useState<ChatResource | null>(null);
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesListRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        (async () => {
-            const result = await fetchChat(chatId);
-            switch (result._t) {
+
+        show(chatId).then((response) => {
+            switch (response._t) {
                 case 'success':
-                    setChatInfo(result.result);
+                    setChatInfo(response.result);
                     break;
                 default:
-                    setError(result.error);
+                    setError(response.error);
                     break;
             }
-        })();
+        });
 
+        // Listen for new messages in the chat and update the chat info
         window.Echo.channel(`chat.${chatId}`)
             .listen('MessageSent', (event) => {
-                console.log("HELLO WORLD MOTHERFUCKER", event);
                 if (!event.message) {
                     console.error('NO MESSAGE');
                 };
-                const messageObject: MessagesResource = event.message;
+                const messageObject: MessageResource = event.message;
                 setChatInfo((prevChatInfo) => {
                     if (!prevChatInfo) return null;
                     return {
@@ -70,12 +70,12 @@ const Chat = ({ chatId }: ChatProps) => {
     }, [chatInfo]);
 
     return (
-        <div className="flex flex-col bg-gray-100" ref={chatContainerRef}>
+        <div className="flex flex-col b`g-gray-100" ref={chatContainerRef}>
             {!chatInfo ? (
                 <ChatLoading />
             ) : (
                 <>
-                    <ChatHeader chatName={chatInfo.chat_name} />
+                    <ChatHeader chatInfo={chatInfo} />
                     <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
                     <footer className="p-4 border-t">
                         <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />

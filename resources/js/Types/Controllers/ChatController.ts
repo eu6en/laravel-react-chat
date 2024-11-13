@@ -1,23 +1,12 @@
-// File: app/Http/resources/ChatController.php
-// Function: getUserChats
-export interface GetUserChatsResource {
-    id: number;
-    name: string;
-    is_group: boolean;
-    last_message: string;
-    last_message_timestamp: string;
-    link: string;
-}
-
-
 // File: app/Http/resources/ChatParticipantResource.php
 export interface ChatParticipantResource {
-    user_name: number;
+    id: number;
+    user_name: string;
     joined_at: string | null;
     is_admin: boolean;
 }
-// File: app/Http/resources/MessagesResource.php
-export interface MessagesResource {
+// File: app/Http/resources/MessageResource.php
+export interface MessageResource {
     sender_name: string;
     sender_id: number;
     content: string;
@@ -27,10 +16,11 @@ export interface MessagesResource {
 }
 // File: app/Http/resources/ChatController.php
 // Function: getSingleChat
-export interface GetSingleChatResource {
-    chat_name: string | null;
+export interface ChatResource {
+    id: number;
+    name: string | null;
     is_group: boolean;
     participants: ChatParticipantResource[];
-    messages: MessagesResource[];
+    messages: MessageResource[];
     created_at: string;
 }

@@ -1,9 +1,9 @@
-import { MessagesResource } from "@/Types/Controllers/ChatController";
+import { MessageResource } from "@/Types/Controllers/ChatController";
 import { useUser } from "@/Context/UserContext"
 import { UserResource } from "@/Types/Controllers/UserController";
 
 type MessagesListProps = {
-    messages: MessagesResource[];
+    messages: MessageResource[];
     isGroup: boolean;
     messagesListRef?: React.RefObject<HTMLDivElement>;
 };

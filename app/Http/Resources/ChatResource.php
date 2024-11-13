@@ -15,12 +15,15 @@ class ChatResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $chat = $this->resource;
+
         return [
-            'chat_name' => $this->is_group ? $this->name : $this->participants->where('id', '!=', Auth::id())->first()?->user->name,
-            'is_group' => $this->is_group,
-            'participants' => ChatParticipantsResource::collection($this->participants),
-            'messages' => MessagesResource::collection($this->messages),
-            'created_at' => $this->created_at,
+            'id' => $chat->id,
+            'name' => $chat->name,
+            'is_group' => $chat->is_group,
+            'participants' => ChatParticipantResource::collection($chat->participants),
+            'messages' => MessageResource::collection($chat->messages),
+            'created_at' => $chat->created_at,
         ];
     }
 }

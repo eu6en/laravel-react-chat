@@ -1,11 +1,11 @@
-import { GetSingleChatResource } from "@/Types/Controllers/ChatController";
+import { ChatResource } from "@/Types/Controllers/ChatController";
 import { Message } from "@/Types/DBInterfaces";
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
 
 interface SendMessageInputProps {
     chatId: Message['chat_id'];
-    setChatInfo: React.Dispatch<React.SetStateAction<GetSingleChatResource | null>>;
+    setChatInfo: React.Dispatch<React.SetStateAction<ChatResource | null>>;
 }
 
 export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInputProps) {

@@ -5,8 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatResource;
-use App\Http\Resources\UserChatsResource;
-use App\Http\Resources\MessagesResource;
+use App\Http\Resources\MessageResource;
 use App\Events\MessageSent;
 use App\Models\User;
 
@@ -25,7 +24,7 @@ class ChatController extends Controller
         }])
         ->get();
 
-        return new UserChatsResource($userChats);
+        return ChatResource::collection($userChats);
     }
 
     public function getSingleChat(Request $request, $chatId)
@@ -59,7 +58,7 @@ class ChatController extends Controller
             'read_at' => null,
         ]);
 
-        $messageResource = new MessagesResource($messageArr);
+        $messageResource = new MessageResource($messageArr);
 
         broadcast(new MessageSent($messageResource))->toOthers();
 
