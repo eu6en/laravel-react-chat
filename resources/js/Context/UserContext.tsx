@@ -1,4 +1,3 @@
-// UserContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { UserResource } from "@/Types/Controllers/UserController";
@@ -38,6 +37,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 };
 
+// This will return a { user } object with fileds like id, name, email etc., which can be used in any component that is wrapped in the UserProvider
 export const useUser = (): UserContextType => {
     const context = useContext(UserContext);
     if (!context) {

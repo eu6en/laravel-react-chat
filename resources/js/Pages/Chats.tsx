@@ -18,6 +18,10 @@ export default function Chats() {
             .catch(error => console.error(error));
     }, []);
 
+    const handleNewChatClick = () => {
+        console.log('New chat clicked');
+    }
+
     return (
         <>
             <Helmet>
@@ -28,9 +32,14 @@ export default function Chats() {
                 <div className="flex h-full bg-gray-100">
                     {/* Left column - Chat list */}
                     <div className="w-1/3 max-w-sm bg-white flex flex-col border-r border-gray-200">
-                        <header className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow">
-                            Chats
-                        </header>
+                        <div className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow flex justify-between">
+                            <header>
+                                Chats
+                            </header>
+                            <button title="Start New Chat" onClick={ handleNewChatClick } className="bg-white shadow rounded-full text-black size-8 flex justify-center items-center">
+                                <img className="size-6" src="/images/plus-icon.svg" alt="Start New Chat" />
+                            </button>
+                        </div>
                         <div className="flex-1 overflow-y-auto">
                             {chats.map((chatInfo) => (
                                 <ChatCard
