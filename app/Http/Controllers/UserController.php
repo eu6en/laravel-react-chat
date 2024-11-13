@@ -9,44 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function fetchUsersByName(Request $request) {
+        $userName = $request->input('userName');
+        if (!$userName || strlen($userName) < 3) {
+            return response()->json([
+                'message' => 'Error. Please provide a valid username to search for.',
+            ], 400);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
+        $users = User::where('name', 'like', '%' . $userName . '%')->take(10)->get();
+        return response()->json(UserResource::collection($users));
     }
 
     /**

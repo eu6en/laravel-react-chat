@@ -8,4 +8,5 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
     Route::get('/chats/{chatId}', [ChatController::class, 'getSingleChat']);
     Route::post('/chats/{chatId}/send-message', [ChatController::class, 'sendMessage']);
     Route::post('/user', [UserController::class, 'getCurrentUserData']);
+    Route::post('/users/search', [UserController::class, 'fetchUsersByName']);
 });
