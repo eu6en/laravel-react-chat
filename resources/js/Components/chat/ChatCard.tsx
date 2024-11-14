@@ -35,7 +35,10 @@ export default function ChatCard({
                     </span>
                 </div>
                 {lastMessage?.content && (
-                    <p className="text-sm text-gray-600 truncate">{lastMessage?.content}</p>
+                    <p className="text-sm text-gray-600 truncate">
+                        {lastMessage.content.trim().substring(0, 40)}
+                        {lastMessage.content.trim().length > 40 && '...'}
+                    </p>
                 )}
             </div>
         </div>
