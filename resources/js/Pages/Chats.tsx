@@ -1,4 +1,4 @@
-import { store } from "@/apis/chat";
+import { store } from "@/api/ChatAPI";
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";

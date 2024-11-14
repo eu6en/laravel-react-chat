@@ -1,4 +1,4 @@
-import { store } from "@/apis/MessageAPI";
+import { store } from "@/api/MessageAPI";
 import { ChatResource } from "@/Types/Controllers/ChatController";
 import { Message } from "@/Types/DBInterfaces";
 import React, { FormEvent, useState } from "react";

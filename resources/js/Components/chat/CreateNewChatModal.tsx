@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent, useCallback } from 'react';
 import { debounce } from 'lodash';
 import axios from 'axios';
 import { UserResource } from "@/Types/Controllers/UserController";
-import { fetchUsersByName } from "@/apis/user";
+import { fetchUsersByName } from "@/api/UserAPI";
 
 interface CreateNewChatModalProps {
     isOpen: boolean;

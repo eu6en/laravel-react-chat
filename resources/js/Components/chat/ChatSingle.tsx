@@ -5,7 +5,7 @@ import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
-import { show } from "@/apis/chat";
+import { show } from "@/api/ChatAPI";
 
 type ChatProps = {
     chatId: Message['chat_id'];
