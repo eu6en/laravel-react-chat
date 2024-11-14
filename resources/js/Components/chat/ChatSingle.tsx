@@ -44,7 +44,7 @@ const Chat = ({ chatId }: ChatProps) => {
                     if (!prevChatInfo) return null;
                     return {
                         ...prevChatInfo,
-                        messages: [...prevChatInfo.messages, messageObject]
+                        messages: [...(prevChatInfo.messages || []), messageObject]
                     };
                 });
             });
@@ -74,7 +74,9 @@ const Chat = ({ chatId }: ChatProps) => {
             ) : (
                 <>
                     <ChatHeader chatInfo={chatInfo} />
-                    <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
+                    {chatInfo.messages && (
+                        <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
+                    )}
                     <footer className="p-4 border-t">
                         <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
                     </footer>
