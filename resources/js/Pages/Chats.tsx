@@ -2,9 +2,9 @@ import { index, store } from "@/api/ChatAPI";
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
+import { UserProvider } from "@/Context/UserContext";
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { ChatResource } from "@/Types/Controllers/ChatController";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 
@@ -54,6 +54,7 @@ export default function Chats() {
 
     return (
         <>
+        <UserProvider>
             <Helmet>
                 <title>Chats</title>
                 <meta name="description" content="List of user chats" />
@@ -94,6 +95,7 @@ export default function Chats() {
                 </div>
                 <CreateNewChatModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
             </AuthenticatedLayout>
+        </UserProvider>
         </>
     );
 }

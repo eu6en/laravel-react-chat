@@ -4,7 +4,6 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import ErrorBoundary from "./ErrorBoundary";
-import { UserProvider } from "./Context/UserContext";
 
 createInertiaApp({
     resolve: (name) =>
@@ -17,9 +16,7 @@ createInertiaApp({
 
         root.render(
             <ErrorBoundary>
-                <UserProvider>
-                    <App {...props} />
-                </UserProvider>
+                <App {...props} />
             </ErrorBoundary>
         );
     },
