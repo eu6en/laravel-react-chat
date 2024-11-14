@@ -29,13 +29,13 @@ export async function show(chatId: Message['chat_id']): Promise<Show_Result> {
 
 type Store_Success = { _t: 'success', result: ChatResource };
 type Store_InvalidChatUserNameError = { _t: 'invalid-chat-user-name-error', error: Error };
-type Store_ResponseEmptyError = { _t: 'response-empty-error', error: Error };
+type Store_EmptyResponseError = { _t: 'empty-response-error', error: Error };
 type Store_AxiosError = { _t: 'axios-error', error: Error };
 type Store_UnknownError = { _t: 'unknown-error', error: Error };
 type Store_Result =
     | Store_Success
     | Store_InvalidChatUserNameError
-    | Store_ResponseEmptyError
+    | Store_EmptyResponseError
     | Store_AxiosError
     | Store_UnknownError;
 
@@ -47,7 +47,7 @@ export async function store(chatName: string, chatParticipantName: string, isGro
             chatParticipantName,
             isGroup,
         });
-        if (!response.data) return { _t: 'response-empty-error', error: new Error('No chat data returned') };
+        if (!response.data) return { _t: 'empty-response-error', error: new Error('No chat data returned') };
         return { _t: 'success', result: response.data };
     } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
