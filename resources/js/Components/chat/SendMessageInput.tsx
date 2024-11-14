@@ -42,9 +42,7 @@ export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInp
         setMessage(""); // Reset the input field value
     };
 
-    if (error) {
-        throw error;
-    }
+    if (error) { throw error; }
 
     return (
         <form onSubmit={handleSubmit}>

@@ -17,8 +17,15 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
+
+        // Do not fetch user data on the login page
+        if (location.pathname === '/login') {
+            return;
+        }
+
         // Fetch the current logged-in user data
         axios.post('/api/user')
             .then(response => {
@@ -26,9 +33,16 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 setUser(userData);
             })
             .catch(error => {
-                throw new Error('Error fetching user: ', error);
+                if (error.response && error.response.status === 401) {
+                    // User is not logged in
+                    setUser(null);
+                } else {
+                    setError(new Error('Error fetching user: ' + error.message));
+                }
             });
     }, []);
+
+    if (error) { throw error; }
 
     return (
         <UserContext.Provider value={{ user, setUser }}>

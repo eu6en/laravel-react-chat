@@ -51,10 +51,8 @@ const Chat = ({ chatId }: ChatProps) => {
 
     }, [chatId]);
 
-    if (error) {
-        // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
-        throw error;
-    }
+    // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
+    if (error) { throw error; }
 
     // // useLayoutEffect ensures that getBoundingClientRect returns the correct value
     useLayoutEffect(() => {

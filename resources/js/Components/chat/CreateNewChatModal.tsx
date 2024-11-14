@@ -17,6 +17,7 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
     const [suggestionsMessage, setSuggestionsMessage] = useState(''); // Message to show when there are no suggestions
     const [showSuggestions, setShowSuggestions] = useState(false); // If true, show the suggestions list
     const [isGroupChat, setIsGroupChat] = useState(false); // If true, the chat is a group chat
+    const [error, setError] = useState<Error | null>(null);
 
     // Set user name input value to the selected suggestion and hide the suggestions list
     const handleSuggestionClick = (suggestion: string) => {
@@ -75,13 +76,14 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
                             setShowSuggestions(true);
                             break;
                         default:
-                            throw response.error;
+                            setError(response.error);
                     }
                 }
             );
         }, 500), []); // 500ms debounce delay
 
     if (!isOpen) return null;
+    if (error) { throw error; }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

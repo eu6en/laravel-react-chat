@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 export default function Chats() {
     const [chats, setChats] = useState<ChatResource[]>([]);
     const [selectedChat, setSelectedChat] = useState<ChatResource | null>(null);
+    const [error, setError] = useState<Error | null>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,11 +39,14 @@ export default function Chats() {
                         setChats([...chats, response.result]);
                         break;
                     default:
-                        throw new Error(response.error.message);
+                        setError(response.error);
+                        break;
                 }
             })
             .catch(error => console.error(error));
     };
+
+    if (error) { throw error; }
 
     return (
         <>
