@@ -1,6 +1,6 @@
+import { store } from "@/apis/MessageAPI";
 import { ChatResource } from "@/Types/Controllers/ChatController";
 import { Message } from "@/Types/DBInterfaces";
-import axios from "axios";
 import React, { FormEvent, useState } from "react";
 
 interface SendMessageInputProps {
@@ -10,39 +10,41 @@ interface SendMessageInputProps {
 
 export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInputProps) {
     const [message, setMessage] = useState("");
+    const [error, setError] = useState<Error | null>(null);
 
     const handleMessageInputChange = (event: React.ChangeEvent<HTMLInputElement>) => setMessage(event.target.value);
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!message.trim()) return;  // Prevent sending empty messages
+        store(chatId, message).then(response => {
+            switch (response._t) {
+                case 'success':
+                    setChatInfo((prevChatInfo) => {
+                        if (!prevChatInfo) return null;
 
-        try {
-            const response = await axios.post(`/api/chats/${chatId}/send-message`, {
-                content: message,
-            });
+                        const updatedChatInfo = {
+                            ...prevChatInfo,
+                            messages: [
+                                ...prevChatInfo.messages,
+                                response.result, // Access the message from the response correctly
+                            ],
+                        };
 
-            setChatInfo((prevChatInfo) => {
-                if (!prevChatInfo) return null;
-
-                const updatedChatInfo = {
-                    ...prevChatInfo,
-                    messages: [
-                        ...prevChatInfo.messages,
-                        response.data.data, // Access the message from the response correctly
-                    ],
-                };
-
-                return updatedChatInfo;
-            });
-
-            setMessage(""); // Reset the input field value
-
-        } catch (error) {
-            console.error("Error sending message:", error);
-        }
+                        return updatedChatInfo;
+                    });
+                    break;
+                default:
+                    setError(response.error);
+                    break;
+            }
+        });
+        setMessage(""); // Reset the input field value
     };
+
+    if (error) {
+        throw error;
+    }
 
     return (
         <form onSubmit={handleSubmit}>

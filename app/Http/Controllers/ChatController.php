@@ -62,10 +62,7 @@ class ChatController extends Controller
 
         broadcast(new MessageSent($messageResource))->toOthers();
 
-        return response()->json([
-            'message' => 'Message sent successfully',
-            'data' => $messageResource,
-        ]);
+        return $messageResource;
     }
 
     public function store (Request $request)
