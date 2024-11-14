@@ -121,9 +121,6 @@ class ChatController extends Controller
         ]);
 
         // Return the chat resource
-        return response()->json([
-            'message' => 'Chat created successfully',
-            'data' => new ChatResource($chat),
-        ]);
+        return new ChatResource($chat);
     }
 }
