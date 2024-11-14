@@ -1,4 +1,4 @@
-import { store } from "@/api/ChatAPI";
+import { index, store } from "@/api/ChatAPI";
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
@@ -16,11 +16,16 @@ export default function Chats() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        axios.get('/api/chats')
-            .then(response => {
-                setChats(response.data);
-            })
-            .catch(error => console.error(error));
+        index().then(response => {
+            switch (response._t) {
+                case 'success':
+                    setChats(response.result);
+                    break;
+                default:
+                    setError(response.error);
+                    break;
+            }
+        });
     }, []);
 
     const handleNewChatClick = () => {
@@ -42,8 +47,7 @@ export default function Chats() {
                         setError(response.error);
                         break;
                 }
-            })
-            .catch(error => console.error(error));
+            });
     };
 
     if (error) { throw error; }

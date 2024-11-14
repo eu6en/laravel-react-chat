@@ -21,6 +21,6 @@ export interface ChatResource {
     name: string | null;
     is_group: boolean;
     participants: ChatParticipantResource[];
-    messages: MessageResource[];
+    messages: MessageResource[] | undefined;
     created_at: string;
 }

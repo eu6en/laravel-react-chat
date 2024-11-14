@@ -57,3 +57,34 @@ export async function store(chatName: string, chatParticipantName: string, isGro
         }
     }
 };
+
+
+type Index_Success = { _t: 'success', result: ChatResource[] };
+type Index_EmptyResponseError = { _t: 'empty-response-error', error: Error };
+type Index_AxiosError = { _t: 'axios-error', error: Error };
+type Index_UnknownError = { _t: 'unknown-error', error: Error };
+type Index_Result =
+    | Index_Success
+    | Index_EmptyResponseError
+    | Index_AxiosError
+    | Index_UnknownError;
+
+export async function index(): Promise<Index_Result> {
+    try {
+
+        const response = await axios.get('/api/chats');
+
+        if (!response.data) return { _t: 'empty-response-error', error: new Error('No chat data returned') };
+
+        return { _t: 'success', result: response.data };
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            return { _t: 'axios-error', error: new Error('An error occurred while sending the message. Please try again later.') };
+        } else {
+            return { _t: 'unknown-error', error: new Error('An unknown error occurred while sending the message. Please try again later.') };
+
+        }
+    }
+}
