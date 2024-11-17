@@ -38,3 +38,37 @@ export async function store(chatId: number, message: string): Promise<Store_Resu
         }
     }
 }
+
+
+type MarkAsRead_Success = { _t: 'success', result: MessageResource };
+type MarkAsRead_InvalidMessageIdError = { _t: 'invalid-message-id-error', error: Error };
+type MarkAsRead_EmptyResponseError = { _t: 'empty-response-error', error: Error };
+type MarkAsRead_AxiosError = { _t: 'axios-error', error: Error };
+type MarkAsRead_UnknownError = { _t: 'unknown-error', error: Error };
+type MarkAsRead_Result =
+    | MarkAsRead_Success
+    | MarkAsRead_InvalidMessageIdError
+    | MarkAsRead_EmptyResponseError
+    | MarkAsRead_AxiosError
+    | MarkAsRead_UnknownError;
+
+export async function markAsRead(messageId: number): Promise<MarkAsRead_Result> {
+    if (!messageId || isNaN(messageId)) return { _t: 'invalid-message-id-error', error: new Error('Invalid message ID: Message ID must be a number') };
+
+    try {
+
+        const response = await axios.post(`/api/messages/${messageId}/read`);
+
+        if (!response.data) return { _t: 'empty-response-error', error: new Error('No message data returned') };
+
+        return { _t: 'success', result: response.data };
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            return { _t: 'axios-error', error: new Error('An error occurred while marking the message as read. Please try again later.') };
+        } else {
+            return { _t: 'unknown-error', error: new Error('An unknown error occurred while marking the message as read. Please try again later.') };
+        }
+    }
+}

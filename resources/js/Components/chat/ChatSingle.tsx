@@ -75,7 +75,7 @@ const Chat = ({ chatId }: ChatProps) => {
                 <>
                     <ChatHeader chatInfo={chatInfo} />
                     {chatInfo.messages && (
-                        <ChatMessagesList messages={chatInfo.messages} isGroup={chatInfo.is_group} messagesListRef={messagesListRef} />
+                        <ChatMessagesList chatInfo={chatInfo} messagesListRef={messagesListRef} />
                     )}
                     <footer className="p-4 border-t">
                         <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />

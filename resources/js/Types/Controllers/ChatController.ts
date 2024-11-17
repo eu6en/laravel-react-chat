@@ -7,6 +7,7 @@ export interface ChatParticipantResource {
 }
 // File: app/Http/resources/MessageResource.php
 export interface MessageResource {
+    id: number;
     sender_name: string;
     sender_id: number;
     content: string;
