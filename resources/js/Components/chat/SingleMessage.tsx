@@ -22,12 +22,11 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
     window.Echo.private(`message-read.${chatId}`)
         .listen('MessageRead', (event) => {
             if (!event.message) {
-                console.error('NO MESSAGE');
+                throw new Error('Web Socket event does not contain a message object');
             };
             const messageObject: MessageResource = event.message;
             // Update the message read status
             if (messageObject.id === message.id) {
-                console.log('UPDATE MESSAGE READ STATUS: ', messageObject.content);
                 setmessage(prevMessage => {
                     if (!prevMessage) return null;
                     return {
@@ -56,9 +55,13 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
                 <div className="text-xs w-fit ml-auto">
                     {messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}
                 </div>
-                {message.sender_id == user.id && message.read_at && (
-                    <div className="text-xs text-green-500 ml-2">
-                        Read
+                {message.sender_id == user.id && (
+                    <div className="w-6 brightness-200">
+                        {message.read_at ? (
+                            <img src="/images/message_status_read.png" alt="" />
+                        ) : (
+                            <img src="/images/message_status_delivered.png" alt="" />
+                        )}
                     </div>
                 )}
             </div>
