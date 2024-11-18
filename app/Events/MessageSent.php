@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
@@ -22,16 +22,8 @@ class MessageSent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        // dd('Broadcasting on channel: chat.' . $this->message->chat_id);
-
-        // return new PrivateChannel('chat.' . $this->message->chat_id);
-        return new Channel('chat.' . $this->messageResource->chat_id);
+        return new PrivateChannel('chat.' . $this->messageResource->chat_id);
     }
-
-    // public function broadcastAs()
-    // {
-    //     return 'message.sent';
-    // }
 
     public function broadcastWith()
     {

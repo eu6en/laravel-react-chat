@@ -22,6 +22,7 @@ const Chat = ({ chatId }: ChatProps) => {
 
     useEffect(() => {
 
+        // Fetch the chat info
         show(chatId).then((response) => {
             switch (response._t) {
                 case 'success':
@@ -34,7 +35,7 @@ const Chat = ({ chatId }: ChatProps) => {
         });
 
         // Listen for new messages in the chat and update the chat info
-        window.Echo.channel(`chat.${chatId}`)
+        window.Echo.private(`chat.${chatId}`)
             .listen('MessageSent', (event) => {
                 if (!event.message) {
                     console.error('NO MESSAGE');
