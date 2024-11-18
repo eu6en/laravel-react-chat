@@ -35,14 +35,14 @@ const Chat = ({ chatId }: ChatProps) => {
         });
 
         // Listen for new messages in the chat and update the chat info
-        window.Echo.private(`chat.${chatId}`)
+        const channel = window.Echo.private(`chat.${chatId}`)
             .listen('MessageSent', (event) => {
                 if (!event.message) {
-                    console.error('NO MESSAGE');
+                    console.error('MessageSent event received without a message object');
                 };
                 const messageObject: MessageResource = event.message;
                 setChatInfo((prevChatInfo) => {
-                    if (!prevChatInfo) return null;
+                    if (!prevChatInfo || prevChatInfo.id !== chatId) return prevChatInfo;
                     return {
                         ...prevChatInfo,
                         messages: [...(prevChatInfo.messages || []), messageObject]
@@ -50,14 +50,17 @@ const Chat = ({ chatId }: ChatProps) => {
                 });
             });
 
+        // Cleanup function to unbind the event listener
+        return () => {
+            channel.stopListening('MessageSent');
+        };
     }, [chatId]);
 
     // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
     if (error) { throw error; }
 
-    // // useLayoutEffect ensures that getBoundingClientRect returns the correct value
+    // useLayoutEffect ensures that getBoundingClientRect returns the correct value
     useLayoutEffect(() => {
-
         if (!chatContainerRef.current || !messagesListRef.current) return;
 
         // Set the height of the chat container to fill the remaining space
@@ -65,18 +68,17 @@ const Chat = ({ chatId }: ChatProps) => {
 
         // Scroll to the bottom of the messages list
         messagesListRef.current.scrollTo(0, messagesListRef.current.scrollHeight);
-
     }, [chatInfo]);
 
     return (
-        <div className="flex flex-col b`g-gray-100" ref={chatContainerRef}>
+        <div className="flex flex-col bg-gray-100" ref={chatContainerRef}>
             {!chatInfo ? (
                 <ChatLoading />
             ) : (
                 <>
                     <ChatHeader chatInfo={chatInfo} />
                     {chatInfo.messages && (
-                        <ChatMessagesList chatInfo={chatInfo} messagesListRef={messagesListRef} />
+                        <ChatMessagesList key={chatId} chatInfo={chatInfo} messagesListRef={messagesListRef} />
                     )}
                     <footer className="p-4 border-t">
                         <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />

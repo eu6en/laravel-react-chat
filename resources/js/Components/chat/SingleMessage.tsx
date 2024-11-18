@@ -14,7 +14,7 @@ type SingleMessageProps = {
 const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage, messageDate, chatId, isGroup }) => {
 
     const { user }: { user: UserResource | null } = useUser();
-    const [message, setmessage] = useState<MessageResource | null>(initialMessage);
+    const [message, setMessage] = useState<MessageResource | null>(initialMessage);
 
     if (!user || !message) return null;
 
@@ -27,7 +27,7 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
             const messageObject: MessageResource = event.message;
             // Update the message read status
             if (messageObject.id === message.id) {
-                setmessage(prevMessage => {
+                setMessage(prevMessage => {
                     if (!prevMessage) return null;
                     return {
                         ...prevMessage,
@@ -66,7 +66,7 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
                 )}
             </div>
         </div>
-  )
+    )
 });
 
 export default SingleMessage;

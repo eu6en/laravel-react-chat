@@ -16,7 +16,7 @@ const MessagesList = ({ chatInfo, messagesListRef }: MessagesListProps) => {
     // Get the current user
     const { user }: { user: UserResource | null } = useUser();
 
-    if (!user || !chatInfo?.messages) return;
+    if (!user || !chatInfo?.messages) return null;
 
     // Observe messages to mark them as read
     useMessageObserver(chatInfo.messages, user.id);
@@ -29,7 +29,7 @@ const MessagesList = ({ chatInfo, messagesListRef }: MessagesListProps) => {
                 const showDate = !previousMessage || new Date(previousMessage.created_at).toDateString() !== messageDate.toDateString(); // Show date if the previous message is from a different day
 
                 return (
-                    <React.Fragment key={index}>
+                    <React.Fragment key={message.id}>
                         {showDate && (
                             <div className="text-center my-2 text-gray-500">
                                 {isToday(messageDate) ? 'Today' : isYesterday(messageDate) ? 'Yesterday' : messageDate.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
