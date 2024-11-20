@@ -4,6 +4,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import ErrorBoundary from "./ErrorBoundary";
+import { NotificationProvider } from "./Context/NotificationContext";
 
 createInertiaApp({
     resolve: (name) =>

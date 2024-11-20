@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\NotificationResource;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Events\MessageSent;
 use App\Models\User;
+use App\Events\UserNotification;
 
 class ChatController extends Controller
 {
@@ -61,6 +63,17 @@ class ChatController extends Controller
         $messageResource = new MessageResource($messageArr);
 
         broadcast(new MessageSent($messageResource))->toOthers();
+
+        // Notify other participants in the chat (excluding the sender)
+        $otherParticipants = $chat->participants->where('user_id', '!=', $user->id);
+        foreach ($otherParticipants as $participant) {
+            $notification = new NotificationResource([
+                'chat' => $chat,
+                'user' => $user,
+                'messageResource' => $messageResource,
+            ]);
+            broadcast(new UserNotification($notification->toArray(request()), $participant->user_id));
+        }
 
         return $messageResource;
     }

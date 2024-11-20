@@ -2,7 +2,7 @@
     "compilerOptions": {
         "jsx": "react-jsx", // Enable JSX support
         "target": "es6",
-        "module": "commonjs",
+        "module": "ESNext",
         "moduleResolution": "node",
         "esModuleInterop": true,
         "skipLibCheck": true,

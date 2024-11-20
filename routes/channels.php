@@ -30,3 +30,8 @@ Broadcast::channel('message-read.{chatId}', function ($user, $chatId) {
     // Check if the user is a participant in the chat
     return $chat->participants()->where('user_id', $user->id)->exists();
 });
+
+// Channel for user notifications
+Broadcast::channel('notifications.{userId}', function ($user, $userId) {
+    return (int) $user->id === (int) $userId;
+});

@@ -25,3 +25,14 @@ export interface ChatResource {
     messages: MessageResource[] | undefined;
     created_at: string;
 }
+
+// File: app/Http/resources/NotificationResource.php
+// Function: sendNotification
+export interface NotificationResource {
+    chat_id: number;
+    isGroup: boolean;
+    chat_name: string;
+    sender_id: number;
+    sender_name: string;
+    content: string;
+}
