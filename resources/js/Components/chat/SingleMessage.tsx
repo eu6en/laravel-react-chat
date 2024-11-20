@@ -1,4 +1,5 @@
 import { useUser } from "@/Context/UserContext";
+import { useMessageRead } from "@/hooks/useMessageRead";
 import { MessageResource } from "@/Types/Controllers/ChatController";
 import { UserResource } from "@/Types/Controllers/UserController";
 import React from "react";
@@ -18,24 +19,18 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
 
     if (!user || !message) return null;
 
-    // Listen for new read messages and update the read status
-    window.Echo.private(`message-read.${chatId}`)
-        .listen('MessageRead', (event) => {
-            if (!event.message) {
-                throw new Error('Web Socket event does not contain a message object');
-            };
-            const messageObject: MessageResource = event.message;
-            // Update the message read status
-            if (messageObject.id === message.id) {
-                setMessage(prevMessage => {
-                    if (!prevMessage) return null;
-                    return {
-                        ...prevMessage,
-                        read_at: messageObject.read_at
-                    };
-                });
-            }
-        });
+    useMessageRead(chatId, (messageObject) => {
+        // Update the message read status
+        if (user.id == messageObject.sender_id && messageObject.id === message.id) {
+            setMessage(prevMessage => {
+                if (!prevMessage) return null;
+                return {
+                    ...prevMessage,
+                    read_at: messageObject.read_at
+                };
+            });
+        }
+    });
 
     return (
         <div

@@ -1,4 +1,5 @@
 import { useUser } from "@/Context/UserContext";
+import { useMessageRead } from "@/hooks/useMessageRead";
 import { useNotificationHandler } from "@/hooks/useNotificationListener";
 import { ChatResource, MessageResource } from "@/Types/Controllers/ChatController";
 import { useEffect, useState } from "react";
@@ -15,12 +16,25 @@ export default function ChatCard({
     const { user } = useUser(); // Get the currently authenticated user from the user context
 
     const [lastMessage, setLastMessage] = useState<MessageResource | undefined>(chatInfo.messages?.[chatInfo.messages.length - 1]); // Get the last message in the chat
-    const [lastMessageTimestamp, setLastMessageTimestamp] = useState<string | undefined>(lastMessage?.updated_at || lastMessage?.created_at); // Get the timestamp of the last message
     const chatName = chatInfo.is_group ? chatInfo.name || 'Group Chat' : chatInfo.participants?.filter(participant => !chatInfo.is_group && participant.id !== user?.id )?.[0].user_name; // If it's a group chat, use the chat name. Otherwise, use the other participant's name.
 
+    // Update the last message timestamp when the last message changes
     useNotificationHandler(notification => {
         if (notification.chat_id === chatInfo.id) {
             setLastMessage(notification.message);
+        }
+    });
+
+    // Remove the chat unread indicator when the message is read
+    useMessageRead(chatInfo.id, (messageObject) => {
+        if (messageObject.id === lastMessage?.id) {
+            setLastMessage(prevMessage => {
+                if (!prevMessage) return undefined;
+                return {
+                    ...prevMessage,
+                    read_at: messageObject.read_at
+                };
+            });
         }
     });
 
@@ -43,9 +57,9 @@ export default function ChatCard({
             <div className="flex-1">
                 <div className="flex justify-between items-center">
                     <h2 className="text-lg font-semibold text-gray-900">{chatName}</h2>
-                    {lastMessageTimestamp && (
+                    {lastMessage?.created_at || lastMessage?.updated_at && (
                         <span className="text-sm text-gray-500">
-                            {lastMessageTimestamp}
+                            {lastMessage?.updated_at || lastMessage?.created_at}
                         </span>
                     )}
                 </div>
@@ -56,7 +70,8 @@ export default function ChatCard({
                     </p>
                 )}
             </div>
-            {lastMessage && !lastMessage.read_at && (
+            {/* Display the unread indicator if the last message is unread and the sender is not the current user */}
+            {user && lastMessage?.sender_id !== user?.id && lastMessage && !lastMessage.read_at && (
                 <div className="w-3 h-3 bg-blue-500 rounded-full absolute right-4 bottom-4"></div>
             )}
         </div>

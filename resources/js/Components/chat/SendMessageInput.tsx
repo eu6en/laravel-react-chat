@@ -26,8 +26,8 @@ export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInp
                         const updatedChatInfo = {
                             ...prevChatInfo,
                             messages: [
-                                ...prevChatInfo.messages,
-                                response.result, // Access the message from the response correctly
+                                ...(prevChatInfo.messages || []),
+                                response.result,
                             ],
                         };
 

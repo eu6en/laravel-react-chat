@@ -28,7 +28,7 @@ class MessageController extends Controller
 
         $messageResource = new MessageResource($message);
 
-        broadcast(new MessageRead($messageResource))->toOthers();
+        broadcast(new MessageRead($messageResource));
 
         return response()->json($messageResource);
     }

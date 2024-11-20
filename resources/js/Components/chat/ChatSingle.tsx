@@ -6,6 +6,7 @@ import ChatLoading from "@/Components/chat/ChatLoading";
 import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
 import { show } from "@/api/ChatAPI";
+import { useNewMessageListener } from "@/hooks/useNewMessageListener";
 
 type ChatProps = {
     chatId: Message['chat_id'];
@@ -34,27 +35,17 @@ const Chat = ({ chatId }: ChatProps) => {
             }
         });
 
-        // Listen for new messages in the chat and update the chat info
-        const channel = window.Echo.private(`chat.${chatId}`)
-            .listen('MessageSent', (event) => {
-                if (!event.message) {
-                    console.error('MessageSent event received without a message object');
-                };
-                const messageObject: MessageResource = event.message;
-                setChatInfo((prevChatInfo) => {
-                    if (!prevChatInfo || prevChatInfo.id !== chatId) return prevChatInfo;
-                    return {
-                        ...prevChatInfo,
-                        messages: [...(prevChatInfo.messages || []), messageObject]
-                    };
-                });
-            });
-
-        // Cleanup function to unbind the event listener
-        return () => {
-            channel.stopListening('MessageSent');
-        };
     }, [chatId]);
+
+    useNewMessageListener(chatId, messageObject => {
+        setChatInfo((prevChatInfo) => {
+            if (!prevChatInfo || prevChatInfo.id !== chatId) return prevChatInfo;
+            return {
+                ...prevChatInfo,
+                messages: [...(prevChatInfo.messages || []), messageObject]
+            };
+        });
+    });
 
     // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
     if (error) { throw error; }
