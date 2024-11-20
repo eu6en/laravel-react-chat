@@ -9,13 +9,13 @@ const Notification = () => {
         toast(
             <div className="border-l-4 border-l-[#3B82F6] pl-4 ">
                 <div>
-                    New message from <b>{notification.sender_name}</b>
-                    {notification.isGroup && (
+                    New message from <b>{notification.message?.sender_name}</b>
+                    {notification.is_group && (
                         <> in <b>{notification.chat_name}</b></>
                     )};
                 </div>
                 <div className="leading-5 text-sm mt-2 line-clamp-1">
-                    {notification.content}
+                    {notification?.message?.content}
                 </div>
             </div>
             , {

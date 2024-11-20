@@ -69,7 +69,6 @@ class ChatController extends Controller
         foreach ($otherParticipants as $participant) {
             $notification = new NotificationResource([
                 'chat' => $chat,
-                'user' => $user,
                 'messageResource' => $messageResource,
             ]);
             broadcast(new UserNotification($notification->toArray(request()), $participant->user_id));

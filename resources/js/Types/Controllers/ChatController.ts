@@ -30,9 +30,7 @@ export interface ChatResource {
 // Function: sendNotification
 export interface NotificationResource {
     chat_id: number;
-    isGroup: boolean;
+    is_group: boolean;
     chat_name: string;
-    sender_id: number;
-    sender_name: string;
-    content: string;
+    message: MessageResource | undefined;
 }

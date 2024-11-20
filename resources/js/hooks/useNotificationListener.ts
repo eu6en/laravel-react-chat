@@ -15,7 +15,7 @@ export const useNotificationHandler = (handleNotification: (notification: Notifi
                 const notification: NotificationResource | null = event.notification;
 
                 // Validate the notification object
-                if (notification?.chat_id || notification?.sender_id || notification?.content) {
+                if (notification?.chat_id || notification?.message?.sender_id || notification?.message?.content) {
                     handleNotification(notification);
                 } else {
                     throw new Error('Invalid notification received');
