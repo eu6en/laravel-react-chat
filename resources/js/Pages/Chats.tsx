@@ -12,8 +12,6 @@ export default function Chats() {
     const [chats, setChats] = useState<ChatResource[]>([]);
     const [selectedChat, setSelectedChat] = useState<ChatResource | null>(null);
     const [error, setError] = useState<Error | null>(null);
-    const [notification, setNotification] = useState<NotificationResource | null>(null);
-    const { user } = useUser();
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -40,33 +38,6 @@ export default function Chats() {
     const handleModalClose = () => {
         setIsModalOpen(false);
     };
-
-    useEffect(() => {
-
-        if (!user) {
-            return;
-        }
-
-        const channel = window.Echo.private(`notifications.${user.id}`)
-                .listen('UserNotification', (event) => {
-
-                    const notification: NotificationResource | null = event.notification;
-
-                    // Validate the notification object
-                    if (notification?.chat_id || notification?.sender_id || notification?.content) {
-                        setNotification(notification);
-                    } else {
-                        throw new Error('Invalid notification received');
-                    }
-
-                });
-
-            return () => {
-                channel.stopListening('UserNotification');
-                window.Echo.leave(`notifications.${user.id}`);
-            };
-
-    }, [user]);
 
     const handleFormSubmit = (chatName: string, chatUserName: string, isGroup: boolean) => {
         store(chatName, chatUserName, isGroup)
@@ -124,7 +95,7 @@ export default function Chats() {
                 </div>
             </div>
             <CreateNewChatModal isOpen={isModalOpen} onClose={handleModalClose} onSubmit={handleFormSubmit} />
-            <Notification notification={notification} />
+            <Notification />
         </>
     );
 }
