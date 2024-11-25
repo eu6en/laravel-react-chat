@@ -6,15 +6,23 @@ use App\Events\MessageRead;
 use App\Models\Message;
 use App\Http\Resources\MessageResource;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Http\Requests\SendMessageRequest;
+use App\Models\Chat;
+use App\Services\ChatService;
 
 class MessageController extends Controller
 {
-    /**
-     * Mark a message as read.
-     *
-     * @param int $messageId
-     * @return JsonResponse
-     */
+    use AuthorizesRequests;
+
+    protected $chatService;
+
+    public function __construct(ChatService $chatService)
+    {
+        $this->chatService = $chatService;
+    }
+
+    // Mark a message as read
     public function markAsRead(int $messageId): JsonResponse
     {
         $message = Message::find($messageId);
@@ -31,5 +39,21 @@ class MessageController extends Controller
         broadcast(new MessageRead($messageResource));
 
         return response()->json($messageResource);
+    }
+
+    // Send a message to a chat
+    public function store(SendMessageRequest $request, Chat $chat)
+    {
+        $this->authorize('sendMessage', $chat);
+        $user = $request->user();
+
+        try {
+            $messageResource = $this->chatService->sendMessage($user, $chat->id, $request->input('content'));
+            return $messageResource;
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+            ], 404);
+        }
     }
 }

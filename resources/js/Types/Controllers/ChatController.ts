@@ -16,7 +16,7 @@ export interface MessageResource {
     updated_at: string;
 }
 // File: app/Http/resources/ChatController.php
-// Function: getSingleChat
+// Function: show
 export interface ChatResource {
     id: number;
     name: string | null;

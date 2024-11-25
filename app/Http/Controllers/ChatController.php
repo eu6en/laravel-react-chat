@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\ChatService;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\StoreChatRequest;
 use App\Models\Chat;
 use Illuminate\Http\Request;
@@ -12,8 +10,6 @@ use App\Http\Resources\ChatResource;
 
 class ChatController extends Controller
 {
-    use AuthorizesRequests;
-
     protected $chatService;
 
     public function __construct(ChatService $chatService)
@@ -21,7 +17,8 @@ class ChatController extends Controller
         $this->chatService = $chatService;
     }
 
-    public function getUserChats(Request $request)
+    // Get all chats where the user is a participant
+    public function index(Request $request)
     {
         $user = $request->user();
 
@@ -37,28 +34,14 @@ class ChatController extends Controller
         return ChatResource::collection($userChats);
     }
 
-    public function getSingleChat(Request $request, $chat)
+    // Get a single chat by ID
+    public function show(Chat $chat)
     {
         if (!$chat) {
             return response()->json(['message' => 'Chat not found'], 404);
         }
 
         return new ChatResource($chat->load(['participants', 'messages']));
-    }
-
-    public function sendMessage(SendMessageRequest $request, Chat $chat)
-    {
-        $this->authorize('sendMessage', $chat);
-        $user = $request->user();
-
-        try {
-            $messageResource = $this->chatService->sendMessage($user, $chat->id, $request->input('content'));
-            return $messageResource;
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], 404);
-        }
     }
 
     // Store a new chat in the database
