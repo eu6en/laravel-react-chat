@@ -37,17 +37,13 @@ class ChatController extends Controller
         return ChatResource::collection($userChats);
     }
 
-    public function getSingleChat(Request $request, $chatId)
+    public function getSingleChat(Request $request, $chat)
     {
-        $chat = Chat::where('id', $chatId)->first();
-
         if (!$chat) {
-            return response()->json([
-                'message' => 'The requested chat could not be found. Please check the chat ID and try again.',
-            ], 404);
+            return response()->json(['message' => 'Chat not found'], 404);
         }
 
-        return new ChatResource($chat);
+        return new ChatResource($chat->load(['participants', 'messages']));
     }
 
     public function sendMessage(SendMessageRequest $request, Chat $chat)
