@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\ChatService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\StoreChatRequest;
 use App\Models\Chat;
@@ -11,6 +12,8 @@ use App\Http\Resources\ChatResource;
 
 class ChatController extends Controller
 {
+    use AuthorizesRequests;
+
     protected $chatService;
 
     public function __construct(ChatService $chatService)
@@ -49,6 +52,7 @@ class ChatController extends Controller
 
     public function sendMessage(SendMessageRequest $request, Chat $chat)
     {
+        $this->authorize('sendMessage', $chat);
         $user = $request->user();
 
         try {
