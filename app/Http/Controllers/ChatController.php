@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\NotificationResource;
+use App\Http\Requests\SendMessageRequest;
+use App\Http\Requests\StoreChatRequest;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatResource;
@@ -42,7 +44,7 @@ class ChatController extends Controller
         return new ChatResource($chat);
     }
 
-    public function sendMessage(Request $request, $chatId)
+    public function sendMessage(SendMessageRequest $request, $chatId)
     {
         $user = $request->user();
         $chat = Chat::where('id', $chatId)->first();
@@ -77,7 +79,8 @@ class ChatController extends Controller
         return $messageResource;
     }
 
-    public function store (Request $request)
+    // Store a new chat in the database
+    public function store(StoreChatRequest $request)
     {
         $chatParticipantName = $request->input('chatParticipantName');
         $chatName = $request->input('chatName');
