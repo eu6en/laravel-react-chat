@@ -47,12 +47,12 @@ class ChatController extends Controller
         return new ChatResource($chat);
     }
 
-    public function sendMessage(SendMessageRequest $request, $chatId)
+    public function sendMessage(SendMessageRequest $request, Chat $chat)
     {
         $user = $request->user();
 
         try {
-            $messageResource = $this->chatService->sendMessage($user, $chatId, $request->input('content'));
+            $messageResource = $this->chatService->sendMessage($user, $chat->id, $request->input('content'));
             return $messageResource;
         } catch (\Exception $e) {
             return response()->json([
