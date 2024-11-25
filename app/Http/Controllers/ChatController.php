@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\NotificationResource;
+use App\Services\ChatService;
 use App\Http\Requests\SendMessageRequest;
 use App\Http\Requests\StoreChatRequest;
 use App\Models\Chat;
 use Illuminate\Http\Request;
 use App\Http\Resources\ChatResource;
-use App\Http\Resources\MessageResource;
-use App\Events\MessageSent;
-use App\Models\User;
-use App\Events\UserNotification;
 
 class ChatController extends Controller
 {
+    protected $chatService;
+
+    public function __construct(ChatService $chatService)
+    {
+        $this->chatService = $chatService;
+    }
+
     public function getUserChats(Request $request)
     {
         $user = $request->user();
@@ -47,92 +50,29 @@ class ChatController extends Controller
     public function sendMessage(SendMessageRequest $request, $chatId)
     {
         $user = $request->user();
-        $chat = Chat::where('id', $chatId)->first();
 
-        if (!$chat) {
+        try {
+            $messageResource = $this->chatService->sendMessage($user, $chatId, $request->input('content'));
+            return $messageResource;
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Chat not found',
+                'message' => $e->getMessage(),
             ], 404);
         }
-
-        $messageArr = $chat->messages()->create([
-            'chat_id' => $chatId,
-            'sender_id' => $user->id,
-            'content' => $request->content,
-            'read_at' => null,
-        ]);
-
-        $messageResource = new MessageResource($messageArr);
-
-        broadcast(new MessageSent($messageResource))->toOthers();
-
-        // Notify other participants in the chat (excluding the sender)
-        $otherParticipants = $chat->participants->where('user_id', '!=', $user->id);
-        foreach ($otherParticipants as $participant) {
-            $notification = new NotificationResource([
-                'chat' => $chat,
-                'messageResource' => $messageResource,
-            ]);
-            broadcast(new UserNotification($notification->toArray(request()), $participant->user_id));
-        }
-
-        return $messageResource;
     }
 
     // Store a new chat in the database
     public function store(StoreChatRequest $request)
     {
-        $chatParticipantName = $request->input('chatParticipantName');
-        $chatName = $request->input('chatName');
-        $isGroup = $request->input('isGroup');
+        $authUser = $request->user();
 
-        $chatParticipantUser = User::where('name', $chatParticipantName)->first();
-
-        // Check if the user exists
-        if (! $chatParticipantUser) {
+        try {
+            $chat = $this->chatService->createChat($request->validated(), $authUser);
+            return new ChatResource($chat);
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'User not found',
+                'message' => $e->getMessage(),
             ], 404);
         }
-
-        $chatParams = [];
-
-        // If it's a group chat, ensure a name is provided
-        if ($isGroup) {
-            if (!$chatName) {
-                return response()->json([
-                    'message' => 'Please provide a name for the group chat',
-                ], 400);
-            };
-            $chatParams = [
-                'name' => $chatName,
-                'user_id' =>  $chatParticipantUser->id,
-            ];
-        } else {
-            $chatParams = [
-                'name' => null,
-                'user_id' =>  $chatParticipantUser->id,
-            ];
-        }
-
-        $chat = Chat::create($chatParams);
-
-        // Create a chat participant entry for the user who joined the chat
-        $chat->participants()->create([
-            'chat_id' => $chat->id,
-            'user_id' =>  $chatParticipantUser->id,
-            'joined_at' => now(),
-        ]);
-
-        // Create a chat participant entry for the authenticated user
-        $chat->participants()->create([
-            'chat_id' => $chat->id,
-            'user_id' => $request->user()->id, // Get the authenticated user id
-            'joined_at' => now(),
-            'is_admin' => $isGroup ?? false, // Assign admin status if it's a group chat
-        ]);
-
-        // Return the chat resource
-        return new ChatResource($chat);
     }
 }
