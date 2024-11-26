@@ -17,12 +17,11 @@ class ChatController extends Controller
         $this->chatService = $chatService;
     }
 
-    // Get all chats where the user is a participant
+    // Get all chats where the user is a participant and the last message in each
     public function index(Request $request)
     {
         $user = $request->user();
 
-        // Get all chats where the user is a participant alongside the last message and its timestamp
         $userChats = Chat::whereHas('participants', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
@@ -44,7 +43,7 @@ class ChatController extends Controller
         return new ChatResource($chat->load(['participants', 'messages']));
     }
 
-    // Store a new chat in the database
+    // Store a newly created chat in the database
     public function store(StoreChatRequest $request)
     {
         $authUser = $request->user();

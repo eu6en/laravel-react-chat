@@ -42,7 +42,7 @@ type Store_Result =
 export async function store(chatName: string, chatParticipantName: string, isGroup: boolean): Promise<Store_Result> {
     if (chatParticipantName.trim() === '') return { _t: 'invalid-chat-user-name-error', error: new Error('Chat participant name cannot be empty') };
     try {
-        const response = await axios.post('/api/chats/store', {
+        const response = await axios.post('/api/chats', {
             chatName,
             chatParticipantName,
             isGroup,

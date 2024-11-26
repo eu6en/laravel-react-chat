@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Events\MessageRead;
 use App\Models\Message;
 use App\Http\Resources\MessageResource;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Requests\SendMessageRequest;
+use Illuminate\Http\Request;
 use App\Models\Chat;
 use App\Services\ChatService;
 
@@ -22,29 +22,55 @@ class MessageController extends Controller
         $this->chatService = $chatService;
     }
 
-    // Mark a message as read
-    public function markAsRead(int $messageId): JsonResponse
+    // Update or mark a message as read
+    public function update(Request $request, Message $message)
     {
-        $message = Message::find($messageId);
+        // Authorize the user
+        $this->authorize('update', $message);
 
-        if (!$message) {
-            return response()->json(['error' => 'Message not found'], 404);
+        // Validate the request data
+        $data = $request->validate([
+            'content' => 'sometimes|string',
+            'read' => 'sometimes|boolean',
+        ]);
+
+        // Update the message content if provided
+        if (isset($data['content'])) {
+            // Ensure the user is the sender
+            if ($message->sender_id !== $request->user()->id) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+            $message->content = $data['content'];
         }
 
-        $message->read_at = now();
+        // Update the read_at timestamp if read flag is true
+        if (isset($data['read']) && $data['read'] === true) {
+            $message->read_at = now();
+        }
+
         $message->save();
 
+        // Prepare the message resource
         $messageResource = new MessageResource($message);
 
-        broadcast(new MessageRead($messageResource));
+        // Broadcast events based on the request data
+        if (isset($data['read']) && $data['read'] === true) {
+            broadcast(new MessageRead($messageResource));
+        }
+
+        if (isset($data['content'])) {
+            // Broadcast a MessageUpdated event
+            // broadcast(new MessageUpdated($messageResource))->toOthers();
+        }
 
         return response()->json($messageResource);
     }
 
-    // Send a message to a chat
+    // Save sent message to the database
     public function store(SendMessageRequest $request, Chat $chat)
     {
-        $this->authorize('sendMessage', $chat);
+        // $this->authorize('store', $chat);
+
         $user = $request->user();
 
         try {

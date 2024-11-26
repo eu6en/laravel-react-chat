@@ -6,11 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SendMessageRequest extends FormRequest
 {
-    public function authorize()
-    {
-        return true;
-    }
-
     public function rules()
     {
         return [
