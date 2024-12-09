@@ -49,7 +49,7 @@ class ChatController extends Controller
         $authUser = $request->user();
 
         try {
-            $chat = $this->chatService->createChat($request->validated(), $authUser);
+            $chat = $this->chatService->create($request->validated(), $authUser);
             return new ChatResource($chat);
         } catch (\Exception $e) {
             return response()->json([

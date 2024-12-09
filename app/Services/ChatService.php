@@ -35,7 +35,7 @@ class ChatService
         return $messageResource;
     }
 
-    public function createChat(array $data, User $authUser)
+    public function create(array $data, User $authUser)
     {
         $participantUser = User::where('name', $data['chatParticipantName'])->first();
 
