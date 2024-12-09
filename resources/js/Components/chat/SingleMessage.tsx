@@ -10,14 +10,23 @@ type SingleMessageProps = {
     messageDate: Date;
     chatId: number;
     isGroup: boolean;
+    searchTerm?: string;
 };
 
-const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage, messageDate, chatId, isGroup }) => {
+const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage, messageDate, chatId, isGroup, searchTerm }) => {
 
     const { user }: { user: UserResource | null } = useUser();
     const [message, setMessage] = useState<MessageResource | null>(initialMessage);
 
     if (!user || !message) return null;
+
+    // Highlight the search term in the message content
+    const highlightedContent = searchTerm
+    ? message.content.replace(
+        new RegExp(`(${searchTerm})`, "gi"),
+        (match) => `<mark>${match}</mark>`
+        )
+    : message.content;
 
     useMessageRead(chatId, (messageObject) => {
         // Update the message read status
@@ -46,7 +55,8 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
                         {message.sender_name}
                     </div>
                 )}
-                <p>{message.content}</p>
+                {/* <p>{message.content}</p> */}
+                <p dangerouslySetInnerHTML={{ __html: highlightedContent }}></p>
                 <div className="text-xs w-fit ml-auto">
                     {messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}
                 </div>

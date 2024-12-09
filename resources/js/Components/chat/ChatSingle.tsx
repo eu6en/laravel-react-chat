@@ -20,6 +20,7 @@ const Chat = ({ chatId }: ChatProps) => {
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesListRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<Error | null>(null);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
 
@@ -67,9 +68,9 @@ const Chat = ({ chatId }: ChatProps) => {
                 <ChatLoading />
             ) : (
                 <>
-                    <ChatHeader chatInfo={chatInfo} />
+                    <ChatHeader chatInfo={chatInfo} onSearch={setSearchTerm}/>
                     {chatInfo.messages && (
-                        <ChatMessagesList key={chatId} chatInfo={chatInfo} messagesListRef={messagesListRef} />
+                        <ChatMessagesList key={chatId} chatInfo={chatInfo} messagesListRef={messagesListRef} searchTerm={searchTerm} />
                     )}
                     <footer className="p-4 border-t">
                         <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
