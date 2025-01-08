@@ -2,15 +2,19 @@ import { index, store } from "@/api/ChatAPI";
 import ChatCard from "@/Components/chat/ChatCard";
 import ChatSingle from "@/Components/chat/ChatSingle";
 import CreateNewChatModal from "@/Components/chat/CreateNewChatModal";
-import { useUser } from "@/Context/UserContext";
-import { ChatResource, NotificationResource } from "@/Types/Controllers/ChatController";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import Notification from "@/Components/chat/Notification";
+import { RootState } from '@/store';
+import { setChatsListInfo, addNewChatToList, setCurrentChat } from '@/store/chatsSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Chats() {
-    const [chats, setChats] = useState<ChatResource[]>([]);
-    const [selectedChat, setSelectedChat] = useState<ChatResource | null>(null);
+
+    const dispatch = useDispatch();
+    const chats = useSelector((state: RootState) => state.chats.chatsListInfo);
+    const currentChat = useSelector((state: RootState) => state.chats.currentChat);
+
     const [error, setError] = useState<Error | null>(null);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +25,7 @@ export default function Chats() {
         index().then(response => {
             switch (response._t) {
                 case 'success':
-                    setChats(response.result);
+                    dispatch(setChatsListInfo(response.result));
                     break;
                 default:
                     setError(response.error);
@@ -44,7 +48,7 @@ export default function Chats() {
             .then(response => {
                 switch (response._t) {
                     case 'success':
-                        setChats([...chats, response.result]);
+                        dispatch(addNewChatToList(response.result));
                         break;
                     default:
                         setError(response.error);
@@ -75,9 +79,9 @@ export default function Chats() {
                     <div className="flex-1 overflow-y-auto">
                         {chats.map((chatInfo) => (
                             <ChatCard
-                                chatInfo={chatInfo}
+                                chatId={chatInfo.id}
                                 key={chatInfo.id}
-                                onClick={() => setSelectedChat(chatInfo)} // Set selected chat on click
+                                onClick={() => currentChat?.id != chatInfo.id ? dispatch(setCurrentChat(chatInfo)) : ''} // Set selected chat on click
                             />
                         ))}
                     </div>
@@ -85,8 +89,8 @@ export default function Chats() {
 
                 {/* Right column - Selected chat messages */}
                 <div className="flex-1 flex flex-col bg-gray-50">
-                    {selectedChat ? (
-                        <ChatSingle chatId={selectedChat.id} />
+                    {currentChat ? (
+                        <ChatSingle chatId={currentChat.id} />
                     ) : (
                         <div className="flex items-center justify-center h-full text-gray-500">
                             Select a chat to view messages

@@ -1,5 +1,4 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ChatResource, MessageResource } from "@/Types/Controllers/ChatController";
 import SendMessageInput from "@/Components/chat/SendMessageInput";
 import ChatHeader from "@/Components/chat/ChatHeader";
 import ChatLoading from "@/Components/chat/ChatLoading";
@@ -7,6 +6,9 @@ import ChatMessagesList from "@/Components/chat/ChatMessagesList";
 import { Message } from "@/Types/DBInterfaces";
 import { show } from "@/api/ChatAPI";
 import { useNewMessageListener } from "@/hooks/useNewMessageListener";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { setCurrentChat, addMessageToCurrentChat } from '@/store/chatsSlice';
 
 type ChatProps = {
     chatId: Message['chat_id'];
@@ -16,7 +18,9 @@ const Chat = ({ chatId }: ChatProps) => {
 
     if (chatId === undefined) throw new Error("Chat ID is undefined");
 
-    const [chatInfo, setChatInfo] = useState<ChatResource | null>(null);
+    const dispatch = useDispatch();
+    const chatInfo = useSelector((state: RootState) => state.chats.currentChat);
+
     const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesListRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<Error | null>(null);
@@ -28,7 +32,7 @@ const Chat = ({ chatId }: ChatProps) => {
         show(chatId).then((response) => {
             switch (response._t) {
                 case 'success':
-                    setChatInfo(response.result);
+                    dispatch(setCurrentChat(response.result));
                     break;
                 default:
                     setError(response.error);
@@ -39,13 +43,7 @@ const Chat = ({ chatId }: ChatProps) => {
     }, [chatId]);
 
     useNewMessageListener(chatId, messageObject => {
-        setChatInfo((prevChatInfo) => {
-            if (!prevChatInfo || prevChatInfo.id !== chatId) return prevChatInfo;
-            return {
-                ...prevChatInfo,
-                messages: [...(prevChatInfo.messages || []), messageObject]
-            };
-        });
+        dispatch(addMessageToCurrentChat(messageObject));
     });
 
     // This will cause the error to be thrown in render, triggering the ErrorBoundary since it can't be triggered in an async function
@@ -68,12 +66,12 @@ const Chat = ({ chatId }: ChatProps) => {
                 <ChatLoading />
             ) : (
                 <>
-                    <ChatHeader chatInfo={chatInfo} onSearch={setSearchTerm}/>
+                    <ChatHeader onSearch={setSearchTerm}/>
                     {chatInfo.messages && (
-                        <ChatMessagesList key={chatId} chatInfo={chatInfo} messagesListRef={messagesListRef} searchTerm={searchTerm} />
+                        <ChatMessagesList key={chatId} messagesListRef={messagesListRef} searchTerm={searchTerm} />
                     )}
                     <footer className="p-4 border-t">
-                        <SendMessageInput chatId={chatId} setChatInfo={setChatInfo} />
+                        <SendMessageInput chatId={chatId}/>
                     </footer>
                 </>
             )}

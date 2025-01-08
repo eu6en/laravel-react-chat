@@ -1,24 +1,30 @@
 import { useUser } from "@/Context/UserContext";
 import { useMessageRead } from "@/hooks/useMessageRead";
+import { RootState } from "@/store";
+import { markMessageAsRead } from "@/store/chatsSlice";
 import { MessageResource } from "@/Types/Controllers/ChatController";
 import { UserResource } from "@/Types/Controllers/UserController";
 import React from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 type SingleMessageProps = {
-    initialMessage: MessageResource;
-    messageDate: Date;
-    chatId: number;
-    isGroup: boolean;
+    messageId: MessageResource['id'];
     searchTerm?: string;
 };
 
-const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage, messageDate, chatId, isGroup, searchTerm }) => {
+const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ messageId, searchTerm }) => {
 
     const { user }: { user: UserResource | null } = useUser();
-    const [message, setMessage] = useState<MessageResource | null>(initialMessage);
 
-    if (!user || !message) return null;
+    const dispatch = useDispatch();
+    const message = useSelector((state: RootState) => state.chats.currentChat?.messages?.find((message) => message.id === messageId));
+    const chatId = useSelector((state: RootState) => state.chats.currentChat?.id);
+    const isGroup = useSelector((state: RootState) => state.chats.currentChat?.is_group);
+
+    if (!user || !message || !chatId) return null;
+
+    const messageDate = new Date(message.created_at);
 
     // Highlight the search term in the message content
     const highlightedContent = searchTerm
@@ -28,16 +34,10 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ initialMessage
         )
     : message.content;
 
-    useMessageRead(chatId, (messageObject) => {
+    useMessageRead(chatId, (response) => {
         // Update the message read status
-        if (user.id == messageObject.sender_id && messageObject.id === message.id) {
-            setMessage(prevMessage => {
-                if (!prevMessage) return null;
-                return {
-                    ...prevMessage,
-                    read_at: messageObject.read_at
-                };
-            });
+        if (user.id == response.sender_id && response.id === message.id) {
+            dispatch(markMessageAsRead({ message_id: messageId, read_at: response.read_at }));
         }
     });
 

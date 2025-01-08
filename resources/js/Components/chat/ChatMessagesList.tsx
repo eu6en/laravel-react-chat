@@ -5,14 +5,17 @@ import React, { useEffect, useRef } from "react";
 import SingleMessage from "./SingleMessage";
 import { isToday, isYesterday } from "@/utils/dateUtils";
 import useMessageObserver from "@/hooks/useMessageObserver";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
 
 type MessagesListProps = {
-    chatInfo: ChatResource | null;
     messagesListRef?: React.RefObject<HTMLDivElement>;
     searchTerm: string;
 };
 
-const MessagesList = ({ chatInfo, messagesListRef, searchTerm }: MessagesListProps) => {
+const MessagesList = ({ messagesListRef, searchTerm }: MessagesListProps) => {
+
+    const chatInfo = useSelector((state: RootState) => state.chats.currentChat); // Get the current chat
 
     // Get the current user
     const { user }: { user: UserResource | null } = useUser();
@@ -36,7 +39,7 @@ const MessagesList = ({ chatInfo, messagesListRef, searchTerm }: MessagesListPro
     }, [searchTerm, chatInfo.messages]);
 
     // Observe messages to mark them as read
-    useMessageObserver(chatInfo.messages, user.id);
+    useMessageObserver(user.id);
 
     return (
         <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={messagesListRef}>
@@ -60,7 +63,7 @@ const MessagesList = ({ chatInfo, messagesListRef, searchTerm }: MessagesListPro
                         ref={(el) => (messageRefs.current[message.id] = el)}
                         className={isMatch ? "bg-yellow-200" : ""}
                     >
-                        <SingleMessage initialMessage={message} messageDate={messageDate} isGroup={chatInfo.is_group} chatId={chatInfo.id} searchTerm={searchTerm} />
+                        <SingleMessage messageId={message.id} searchTerm={searchTerm} />
                     </div>
 
                     </React.Fragment>

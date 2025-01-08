@@ -1,19 +1,30 @@
 import { useUser } from "@/Context/UserContext";
 import { useMessageRead } from "@/hooks/useMessageRead";
 import { useNotificationHandler } from "@/hooks/useNotificationListener";
-import { ChatResource, MessageResource } from "@/Types/Controllers/ChatController";
+import { RootState } from "@/store";
+import { MessageResource } from "@/Types/Controllers/ChatController";
+import { Message } from "@/Types/DBInterfaces";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface ChatCardProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-    chatInfo: ChatResource;
+    chatId: Message['chat_id'];
 }
 
 export default function ChatCard({
-    chatInfo,
+    chatId,
     ...props
 }: ChatCardProps) {
 
     const { user } = useUser(); // Get the currently authenticated user from the user context
+
+    const chatInfo = useSelector((state: RootState) =>
+        state.chats.chatsListInfo.find((chat) => chat.id === chatId)
+    );
+
+    if (!chatInfo) {
+        return null;
+    }
 
     const [lastMessage, setLastMessage] = useState<MessageResource | undefined>(chatInfo.messages?.[chatInfo.messages.length - 1]); // Get the last message in the chat
     const chatName = chatInfo.is_group ? chatInfo.name || 'Group Chat' : chatInfo.participants?.filter(participant => !chatInfo.is_group && participant.id !== user?.id )?.[0].user_name; // If it's a group chat, use the chat name. Otherwise, use the other participant's name.

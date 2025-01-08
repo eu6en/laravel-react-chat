@@ -1,14 +1,16 @@
 import { store } from "@/api/MessageAPI";
-import { ChatResource } from "@/Types/Controllers/ChatController";
 import { Message } from "@/Types/DBInterfaces";
 import React, { FormEvent, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { addMessageToCurrentChat } from '@/store/chatsSlice';
 
 interface SendMessageInputProps {
     chatId: Message['chat_id'];
-    setChatInfo: React.Dispatch<React.SetStateAction<ChatResource | null>>;
 }
 
-export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInputProps) {
+export default function SendMessageInput({ chatId }: SendMessageInputProps) {
+    const dispatch = useDispatch();
+
     const [message, setMessage] = useState("");
     const [error, setError] = useState<Error | null>(null);
 
@@ -20,19 +22,7 @@ export default function SendMessageInput({ chatId, setChatInfo }: SendMessageInp
         store(chatId, message).then(response => {
             switch (response._t) {
                 case 'success':
-                    setChatInfo((prevChatInfo) => {
-                        if (!prevChatInfo) return null;
-
-                        const updatedChatInfo = {
-                            ...prevChatInfo,
-                            messages: [
-                                ...(prevChatInfo.messages || []),
-                                response.result,
-                            ],
-                        };
-
-                        return updatedChatInfo;
-                    });
+                    dispatch(addMessageToCurrentChat(response.result));
                     break;
                 default:
                     setError(response.error);

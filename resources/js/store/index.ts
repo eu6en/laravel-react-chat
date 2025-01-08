@@ -1,9 +1,9 @@
-// resources/js/store/index.ts
 import { configureStore } from '@reduxjs/toolkit';
+import chatsReducer from './chatsSlice';
 
 export const store = configureStore({
     reducer: {
-        // add your reducers here
+        chats: chatsReducer,
     },
 });
 
