@@ -20,7 +20,7 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-800 h-screen flex flex-col justify-stretch">
 
-            <nav className="border-b border-gray-100 dark:border-gray-500 bg-white dark:bg-gray-800">
+            <nav className="border-b border-gray-100 dark:border-black bg-white dark:bg-gray-800">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-end">
                         {/* <div className="flex">
