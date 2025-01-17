@@ -43,7 +43,7 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ messageId, sea
 
     return (
         <div
-            className={`flex ${message.sender_id == user.id ? "justify-end" : "justify-start"}`}
+            className={`flex ${message.sender_id == user.id ? "justify-self-end" : "justify-self-start"} max-w-[40rem]`}
             data-message-id={message.id}
         >
             <div
