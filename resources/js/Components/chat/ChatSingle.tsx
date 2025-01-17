@@ -61,7 +61,7 @@ const Chat = ({ chatId }: ChatProps) => {
     }, [chatInfo]);
 
     return (
-        <div className="flex flex-col bg-gray-100" ref={chatContainerRef}>
+        <div className="flex flex-col bg-gray-100 dark:bg-gray-900" ref={chatContainerRef}>
             {!chatInfo ? (
                 <ChatLoading />
             ) : (
@@ -70,7 +70,7 @@ const Chat = ({ chatId }: ChatProps) => {
                     {chatInfo.messages && (
                         <ChatMessagesList key={chatId} messagesListRef={messagesListRef} searchTerm={searchTerm} />
                     )}
-                    <footer className="p-4 border-t">
+                    <footer>
                         <SendMessageInput chatId={chatId}/>
                     </footer>
                 </>

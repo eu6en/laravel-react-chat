@@ -8,6 +8,7 @@ import Notification from "@/Components/chat/Notification";
 import { RootState } from '@/store';
 import { setChatsListInfo, addNewChatToList, setCurrentChat } from '@/store/chatsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 export default function Chats() {
 
@@ -65,15 +66,15 @@ export default function Chats() {
                 <title>Chats</title>
                 <meta name="description" content="List of user chats" />
             </Helmet>
-            <div className="flex h-full bg-gray-100">
+            <div className="flex h-full">
                 {/* Left column - Chat list */}
-                <div className="w-1/3 max-w-sm bg-white flex flex-col border-r border-gray-200">
-                    <div className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow flex justify-between">
+                <div className="w-1/3 max-w-sm bg-white dark:bg-gray-800 dark:text-white flex flex-col border-r border-gray-300 dark:border-black">
+                    <div className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow flex justify-between items-center h-16 border-b-gray-300 dark:border-b-black border-b">
                         <header>
                             Chats
                         </header>
-                        <button title="Start New Chat" onClick={ handleNewChatClick } className="bg-white shadow rounded-full text-black size-8 flex justify-center items-center">
-                            <img className="size-6" src="/images/plus-icon.svg" alt="Start New Chat" />
+                        <button title="Start New Chat" onClick={ handleNewChatClick } className="rounded-full size-8 flex justify-center items-center">
+                            <PencilSquareIcon className="w-6 h-6" />
                         </button>
                     </div>
                     <div className="flex-1 overflow-y-auto">
@@ -88,7 +89,7 @@ export default function Chats() {
                 </div>
 
                 {/* Right column - Selected chat messages */}
-                <div className="flex-1 flex flex-col bg-gray-50">
+                <div className="flex-1 flex flex-col bg-gray-50 dark:bg-gray-800">
                     {currentChat ? (
                         <ChatSingle chatId={currentChat.id} />
                     ) : (

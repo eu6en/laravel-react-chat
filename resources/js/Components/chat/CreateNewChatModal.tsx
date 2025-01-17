@@ -87,14 +87,14 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-4 rounded shadow-lg w-1/3 relative">
+            <div className="bg-white dark:bg-gray-800 dark:text-white p-4 rounded shadow-lg w-1/3 relative">
                 <button className="absolute top-2 right-2 text-3xl leading-none" onClick={onClose}>
                     &times;
                 </button>
                 <h2 className="text-xl font-semibold mb-4">Start New Chat</h2>
                 <form onSubmit={handleFormSubmit}>
                     <div className="mb-4 relative">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="chatUser">
+                        <label className="block text-gray-700 dark:text-gray-200 text-sm font-bold mb-2" htmlFor="chatUser">
                             User Name
                         </label>
                         <input
@@ -102,12 +102,12 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
                             id="chatUser"
                             value={chatUserName}
                             onChange={ handleInputChange }
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline dark:bg-transparent"
                             required
                             ref={userNameInputRef}
                         />
                         {showSuggestions && suggestions.length > 0 && (
-                            <ul className="absolute z-10 bg-white border border-gray-300 rounded w-full mt-1">
+                            <ul className="absolute z-10 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded w-full mt-1">
                                 {suggestions.map((suggestion, index) => (
                                     <li
                                         key={index}
@@ -139,13 +139,13 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
                             onChange={(e) => setIsGroupChat(e.target.checked)}
                             className="mr-2 leading-tight cursor-pointer"
                         />
-                        <label className="block text-gray-700 text-sm font-bold cursor-pointer" htmlFor="isGroupChat">
+                        <label className="block text-gray-700 dark:text-white text-sm font-bold cursor-pointer" htmlFor="isGroupChat">
                             Is Group Chat
                         </label>
                     </div>
                     {isGroupChat && (
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="chatName">
+                            <label className="block text-gray-700 dark:text-white text-sm font-bold mb-2" htmlFor="chatName">
                                 Group Chat Name
                             </label>
                             <input
@@ -153,7 +153,7 @@ const CreateNewChatModal: React.FC<CreateNewChatModalProps> = ({ isOpen, onClose
                                 id="chatName"
                                 value={groupChatName}
                                 onChange={(e) => setGroupChatName(e.target.value)}
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline dark:bg-transparent"
                                 required
                             />
                         </div>

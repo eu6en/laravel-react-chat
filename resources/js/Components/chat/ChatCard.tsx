@@ -56,26 +56,26 @@ export default function ChatCard({
     return (
         <div
             {...(props as any)}
-            className="flex px-6 py-4 hover:bg-gray-200 cursor-pointer border-b items-start relative"
+            className="flex px-6 py-4 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-300 dark:border-black items-start relative"
         >
             {/* Display the chat icon */}
             <img
                 src='/images/chat-bubble-oval-left.svg'
                 alt={`${chatName} icon`}
-                className="w-12 h-12 rounded-full mr-4"
+                className="w-12 h-12 rounded-full mr-4 dark:filter dark:invert"
             />
             {/* Display the chat name and last message */}
             <div className="flex-1">
                 <div className="flex justify-between items-center">
-                    <h2 className="text-lg font-semibold text-gray-900">{chatName}</h2>
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-200">{chatName}</h2>
                     {lastMessage?.created_at || lastMessage?.updated_at && (
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm">
                             {lastMessage?.updated_at || lastMessage?.created_at}
                         </span>
                     )}
                 </div>
                 {lastMessage?.content && (
-                    <p className="text-sm text-gray-600 truncate">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
                         {lastMessage.content.trim().substring(0, 40)}
                         {lastMessage.content.trim().length > 40 && '...'}
                     </p>

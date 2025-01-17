@@ -47,11 +47,11 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ messageId, sea
             data-message-id={message.id}
         >
             <div
-                className={`px-4 py-2 rounded-lg flex justify-between gap-3 items-end ${message.sender_id == user.id ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"
+                className={`px-4 py-2 rounded-lg flex justify-between gap-3 items-end ${message.sender_id == user.id ? "bg-blue-500 text-white" : "bg-gray-200 dark:bg-gray-700 dark:text-white"
                     }`}
             >
                 {isGroup && message.sender_id != user.id && (
-                    <div className="text-xs text-gray-500 mb-1">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                         {message.sender_name}
                     </div>
                 )}

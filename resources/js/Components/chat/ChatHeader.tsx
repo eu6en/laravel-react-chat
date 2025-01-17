@@ -40,7 +40,7 @@ const ChatHeader = ({ onSearch }: ChatHeaderProps) => {
             <Helmet>
                 <title>{chatHeadline}</title>
             </Helmet>
-            <header className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow flex items-center">
+            <header className="bg-blue-500 text-white py-4 px-6 text-xl font-semibold shadow flex items-center h-16 border-b-gray-300 dark:border-b-black border-b">
                 {chatHeadline}
                 <button onClick={handleSearchClick} className="ml-auto">
                     <img className="w-6 text-white" src={isSearchOpen ? '/images/cross-icon.svg' : '/images/search-icon.svg'} alt="Search Icon" />
