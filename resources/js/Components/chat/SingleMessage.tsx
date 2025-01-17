@@ -61,7 +61,7 @@ const SingleMessage: React.FC<SingleMessageProps> = React.memo(({ messageId, sea
                     {messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'UTC' })}
                 </div>
                 {message.sender_id == user.id && (
-                    <div className="w-6 brightness-200">
+                    <div className="w-6 brightness-200 shrink-0">
                         {message.read_at ? (
                             <img src="/images/message_status_read.png" alt="" />
                         ) : (
